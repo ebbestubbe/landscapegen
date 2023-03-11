@@ -5,29 +5,24 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 
+
 def generate_landscape(characters, size):
     landscape = np.random.choice(characters, size*size).reshape(size,size)
     return landscape
 
 
-def make_values_and_cmap(characters, landscape):
+def plot_landscape(landscape, characters):
+
     char_list = list(characters.keys()) #Position in this is value, We do this once so the value is locked for each tile 
     char_dict = {c: i for i,c in enumerate(char_list)} # tile: value
     values = np.vectorize(char_dict.get)(landscape)
     colors = np.array([characters[char_list[i]] for i,c in enumerate(char_list)])
     cmap = ListedColormap(colors)
+    fig,ax = plt.subplots()
 
-    return values, cmap
-
-
-def plot_landscape(landscape, characters):
-
-    values, cmap = make_values_and_cmap(characters=characters, landscape=landscape)
-    #fig,ax = plt.subplots()
-
-    plt.imshow(values, cmap, rasterized=True,vmin=0, vmax=len(characters))
-    plt.colorbar(cmap=cmap, ticks=np.arange(0,len(characters))+0.5)
-    
+    cax = ax.imshow(values, cmap, rasterized=True,vmin=0, vmax=len(characters))
+    cbar = fig.colorbar(cax, cmap=cmap, ticks=np.arange(0,len(characters))+0.5)
+    cbar.ax.set_yticklabels(char_list)
     plt.show()
 
 
