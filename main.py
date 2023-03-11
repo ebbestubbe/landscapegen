@@ -10,29 +10,40 @@ def generate_landscape(characters, size):
     return landscape
 
 
-# def plot_landscape(landscape,cmap):
+def make_values_and_cmap(characters, landscape):
+    char_list = list(characters.keys()) #Position in this is value, We do this once so the value is locked for each tile 
+    char_dict = {c: i for i,c in enumerate(char_list)} # tile: value
+    values = np.vectorize(char_dict.get)(landscape)
+    colors = np.array([characters[char_list[i]] for i,c in enumerate(char_list)])
+    cmap = ListedColormap(colors)
 
-#     plt.imshow(landscape, cmap, rasterized=True)
-#     plt.show()
+    return values, cmap
 
+
+def plot_landscape(landscape, characters):
+
+    values, cmap = make_values_and_cmap(characters=characters, landscape=landscape)
+    #fig,ax = plt.subplots()
+
+    plt.imshow(values, cmap, rasterized=True,vmin=0, vmax=len(characters))
+    plt.colorbar(cmap=cmap, ticks=np.arange(0,len(characters))+0.5)
+    
+    plt.show()
 
 
 def main():
-    size = 10
-    characters = ['L', 'W', 'S']
-
-
-    landscape = generate_landscape(characters=characters, size=size)
+    size = 4
+    characters = {
+        'L': [0,1,0,1],
+        'W': [0,0,1,1],
+        'S': [1,1,0,1],
+        "lava": [1,0,0,1]
+    }
     
-    codes = {'L': 0,'W':1,'S':2}
-    values = np.vectorize(codes.get)(landscape)
 
-    colors = np.array([[0,1,0,1],[0,0,1,1],[1,1,0,1]])
-    cmap = ListedColormap(colors)
-    print(colors)
-    
-    plt.imshow(values, cmap, rasterized=True,vmin=0, vmax=2)
-    plt.show()
+    landscape = generate_landscape(characters=list(characters.keys()), size=size)
+    print(landscape)
+    plot_landscape(landscape,characters)
 
 
 if __name__ == '__main__':
