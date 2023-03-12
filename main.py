@@ -38,43 +38,43 @@ def generate_landscape_wfc(characters, connections, size0, size1):
         to_visit = []
         #Top
         if j_top >= 0:
-            neighbor_top = coords[j_top][i]
+            coords_top = (j_top, i)
             allowed_top = set(flatten_list_of_lists([connections[tile]['top'] for tile in wavefunction[j][i]]))
             forbidden_top = character_set - allowed_top
             to_remove_top = set(wavefunction[j_top][i]).intersection(forbidden_top)
             if len(to_remove_top) > 0:
-                to_visit.append((neighbor_top, to_remove_top))
-                collapse(neighbor_top, forbidden_top)
+                to_visit.append((coords_top, to_remove_top))
+                collapse(coords_top, forbidden_top)
 
         #Right
         if i_right < size0:
-            neighbor_right = coords[j][i_right]
+            coords_right = (j, i_right)
             allowed_right = set(flatten_list_of_lists([connections[tile]['right'] for tile in wavefunction[j][i]]))
             forbidden_right = character_set - allowed_right
             to_remove_right = set(wavefunction[j][i_right]).intersection(forbidden_right)
             if len(to_remove_right) > 0:
-                to_visit.append((neighbor_right, to_remove_right))
-                collapse(neighbor_right, to_remove_right)
+                to_visit.append((coords_right, to_remove_right))
+                collapse(coords_right, to_remove_right)
 
         #Bottom
         if j_bottom < size1:
-            neighbor_bottom = coords[j_bottom][i]
+            cords_bottom = (j_bottom, i)
             allowed_bottom = set(flatten_list_of_lists([connections[tile]['bottom'] for tile in wavefunction[j][i]]))
             forbidden_bottom = character_set - allowed_bottom
             to_remove_bottom = set(wavefunction[j_bottom][i]).intersection(forbidden_bottom)
             if len(to_remove_bottom) > 0:
-                to_visit.append((neighbor_bottom, to_remove_bottom))
-                collapse(neighbor_bottom, to_remove_bottom)
+                to_visit.append((cords_bottom, to_remove_bottom))
+                collapse(cords_bottom, to_remove_bottom)
 
         #Left
         if i_left >= 0:
-            neighbor_left = coords[j][i-1]
+            cords_left = (j, i_left)
             allowed_left = set(flatten_list_of_lists([connections[tile]['left'] for tile in wavefunction[j][i]]))
             forbidden_left = character_set - allowed_left
             to_remove_left = set(wavefunction[j][i_left]).intersection(forbidden_left)
             if len(to_remove_left) > 0:
-                to_visit.append((neighbor_left, to_remove_left))
-                collapse(neighbor_left, to_remove_left)
+                to_visit.append((cords_left, to_remove_left))
+                collapse(cords_left, to_remove_left)
     #wavefunction_np = np.array([['; '.join(tilelist) for tilelist in sublist] for sublist in wavefunction])
     undetermined = [[len(subsublist)!=1 for subsublist in sublist] for sublist in wavefunction]
     coords = [[(j,i) for i,subsublist in enumerate(sublist) if undetermined[j][i]] for j,sublist in enumerate(wavefunction)]
@@ -91,24 +91,8 @@ def generate_landscape_wfc(characters, connections, size0, size1):
         coords = [[(j,i) for i,subsublist in enumerate(sublist) if undetermined[j][i]] for j,sublist in enumerate(wavefunction)]
         flat_coords = [item for sublist in coords for item in sublist]
 
-    wavefunction_np = np.array([['; '.join(tilelist) for tilelist in sublist] for sublist in wavefunction])
-    print("foo")
 
     return np.array(wavefunction)
-    #Now we have a random point that we can choose to do something with:
-    # Assume that any choice is valid
-    # Pick random tile
-    # Visit neighbors, remove tiles that are not valid
-    
-
-
-    # for i in landscape.shape[0]:
-    #     for j in landscape.shape[1]:
-    #         neighbor_0 = landscape[i-1,j]
-    #         neighbor_1 = landscape[i,j+1]
-    #         neighbor_2 = landscape[i+1,j]
-    #         neighbor_3 = landscape[i,j-1]
-
 
 
 def plot_landscape(landscape, characters):
@@ -161,12 +145,14 @@ def depth_first_grid():
 def main():
     #run1()
 
-    size0 = 3
-    size1 = 3
+    size0 = 50
+    size1 = 50
     info = {
         'Grass': [0,1,0,1],
         'Water': [0,0,1,1],
-        #'Sand': [1,1,0,1],
+        'Sand': [1,1,0,1],
+        "Cliff": [0,0,0,1],
+        "Lava": [1,0,0,1]
     }
     characters=list(info.keys())
     connections1 = {
@@ -197,7 +183,59 @@ def main():
             "left": ["Grass"]
         }
     }
-    landscape = generate_landscape_wfc(characters=characters, connections=connections2, size0=size0, size1=size1)
+    connections3 = {
+        "Grass": {
+            "top": ["Grass", "Sand"],
+            "right": ["Grass", "Sand"],
+            "bottom": ["Grass", "Sand"],
+            "left": ["Grass", "Sand"]
+        },
+        "Water": {
+            "top": ["Water", "Sand"],
+            "right": ["Water", "Sand"],
+            "bottom": ["Water", "Sand"],
+            "left": ["Water", "Sand"]
+        },
+        "Sand": {
+            "top": ["Water", "Grass", "Sand"],
+            "right": ["Water", "Grass", "Sand"],
+            "bottom": ["Water", "Grass", "Sand"],
+            "left": ["Water", "Grass", "Sand"]
+        }
+    }
+    connections4 = {
+        "Grass": {
+            "top": ["Grass", "Sand", "Cliff"],
+            "right": ["Grass", "Sand", "Cliff"],
+            "bottom": ["Grass", "Sand", "Cliff"],
+            "left": ["Grass", "Sand", "Cliff"]
+        },
+        "Water": {
+            "top": ["Water", "Sand"],
+            "right": ["Water", "Sand"],
+            "bottom": ["Water", "Sand"],
+            "left": ["Water", "Sand"]
+        },
+        "Sand": {
+            "top": ["Water", "Grass", "Sand"],
+            "right": ["Water", "Grass", "Sand"],
+            "bottom": ["Water", "Grass", "Sand"],
+            "left": ["Water", "Grass", "Sand"]
+        },
+        "Lava": {
+            "top": ["Cliff"],
+            "right": ["Cliff"],
+            "bottom": ["Cliff"],
+            "left": ["Cliff"]
+        },
+        "Cliff": {
+            "top": ["Grass", "Cliff", "Lava"],
+            "right": ["Grass", "Cliff", "Lava"],
+            "bottom": ["Grass", "Cliff", "Lava"],
+            "left": ["Grass", "Cliff", "Lava"]
+        }
+    }
+    landscape = generate_landscape_wfc(characters=characters, connections=connections4, size0=size0, size1=size1)
     plot_landscape(landscape=landscape, characters=info)
     # print("foo")
     #run1()
