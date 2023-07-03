@@ -9,19 +9,19 @@ def flatten_list_of_lists(list_of_lists):
     return [item for sublist in list_of_lists for item in sublist]
 
 
-def plot_landscape(landscape, characters):
+def plot_landscape(landscape, tileset_info):
 
     char_list = list(
-        characters.keys()
+        tileset_info.keys()
     )  # Position in this is value, We do this once so the value is locked for each tile
     char_dict = {c: i for i, c in enumerate(char_list)}  # tile: value
     values = np.vectorize(char_dict.get)(landscape)
-    colors = np.array([characters[char_list[i]] for i, c in enumerate(char_list)])
+    colors = np.array([tileset_info[char_list[i]] for i, c in enumerate(char_list)])
     cmap = ListedColormap(colors)
     fig, ax = plt.subplots()
 
-    cax = ax.imshow(values, cmap, rasterized=True, vmin=0, vmax=len(characters))
-    cbar = fig.colorbar(cax, cmap=cmap, ticks=np.arange(0, len(characters)) + 0.5)
+    cax = ax.imshow(values, cmap, rasterized=True, vmin=0, vmax=len(tileset_info))
+    cbar = fig.colorbar(cax, cmap=cmap, ticks=np.arange(0, len(tileset_info)) + 0.5)
     cbar.ax.set_yticklabels(char_list)
     return fig, ax
 
@@ -52,5 +52,5 @@ def plot_incomplete(wavefunction):
                 wavefunc2[jj][ii] = ["impossible"]
                 # print(f"{jj}, {ii} is impossible")
     landscape = np.array(wavefunc2)
-    plot_landscape(landscape=landscape, characters=info)
+    plot_landscape(landscape=landscape, tileset_info=info)
     print("foo")
