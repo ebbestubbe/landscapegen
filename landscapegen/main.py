@@ -233,19 +233,37 @@ def run_buggy_coast():
     size1 = 3
 
     tileset = coast_boundary_factory()
-    info = tileset.info
-    connections = tileset.connections
 
     landscape = generate_landscape_wfc(tileset=tileset, size0=size0, size1=size1)
-    plot_landscape(landscape=landscape, tileset_info=info)
+    plot_landscape(landscape=landscape, tileset_info=tileset.info)
+
+
+def plot_example():
+    # size0 = 4
+    # size1 = 3
+
+    tileset = simple_tileset_factory()
+    # wavefunction = [
+    #     [tileset.characters for _1 in range(size0)] for _2 in range(size1)
+    # ]  # Array of all the possible tiles at this point
+    landscape = [
+        [["Grass"], ["Grass"], ["Grass"], ["Grass"], ["Grass"]],
+        [["Sand"], ["Water"], ["Grass"], ["Grass"], ["Grass"]],
+        [["Sand"], ["Sand"], ["Grass"], ["Grass"], ["Grass"]],
+        [["Grass"], ["Grass"], ["Grass"], ["Grass"], ["Grass"]],
+        [["Sand"], ["Water"], ["Grass"], ["Grass"], ["Grass"]],
+    ]
+
+    plot_incomplete(wavefunction=landscape, tileset=tileset)
+    plt.show()
 
 
 def main():
-
+    plot_example()
     # run_buggy_coast()
-    run3()
+    # run3()
 
-    plt.show()
+    # plt.show()
 
 
 if __name__ == "__main__":

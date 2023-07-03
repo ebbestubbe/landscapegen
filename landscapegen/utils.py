@@ -10,7 +10,8 @@ def flatten_list_of_lists(list_of_lists):
 
 
 def plot_landscape(landscape, tileset_info):
-
+    size0 = len(landscape)
+    size1 = len(landscape[1])
     char_list = list(
         tileset_info.keys()
     )  # Position in this is value, We do this once so the value is locked for each tile
@@ -23,20 +24,20 @@ def plot_landscape(landscape, tileset_info):
     cax = ax.imshow(values, cmap, rasterized=True, vmin=0, vmax=len(tileset_info))
     cbar = fig.colorbar(cax, cmap=cmap, ticks=np.arange(0, len(tileset_info)) + 0.5)
     cbar.ax.set_yticklabels(char_list)
+    # ax.set_xticks(np.arange(-.5, 10, 1), minor=True)
+    # ax.set_yticks(np.arange(-.5, 10, 1), minor=True)
+    ax.set_xticks(np.arange(-0.5, size1, 1), minor=True)
+    ax.set_yticks(np.arange(-0.5, size0, 1), minor=True)
+    ax.grid(which="minor", color="w", linestyle="-", linewidth=2)
+    # ax.grid()
     return fig, ax
 
 
-def plot_incomplete(wavefunction):
+def plot_incomplete(wavefunction, tileset):
 
-    info = {
-        "Grass": [0, 1, 0, 1],
-        "Water": [0, 0, 1, 1],
-        "Sand": [1, 1, 0, 1],
-        "Void": [0, 0, 0, 1],
-        "Cliff": [0, 0, 0, 1],
-        "Lava": [1, 0, 0, 1],
-        "impossible": [1, 0, 1, 1],
-    }
+    info = copy.deepcopy(tileset.info)
+    info["Void"] = [1, 1, 1, 1]
+    info["impossible"] = [1, 0, 1, 1]
     wavefunc2 = copy.deepcopy(wavefunction)
     size0 = len(wavefunc2)
     size1 = len(wavefunc2[0])
@@ -53,4 +54,3 @@ def plot_incomplete(wavefunction):
                 # print(f"{jj}, {ii} is impossible")
     landscape = np.array(wavefunc2)
     plot_landscape(landscape=landscape, tileset_info=info)
-    print("foo")
