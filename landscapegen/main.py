@@ -12,12 +12,12 @@ from utils import plot_incomplete
 from utils import plot_landscape
 
 
-def generate_landscape_wfc(characters, connections, size0, size1):
+def generate_landscape_wfc(tileset, size0, size1):
 
-    character_set = set(characters)
+    character_set = set(tileset.characters)
 
     wavefunction = [
-        [characters for _1 in range(size0)] for _2 in range(size1)
+        [tileset.characters for _1 in range(size0)] for _2 in range(size1)
     ]  # Array of all the possible tiles at this point
 
     def collapse(point, remove_in):
@@ -60,7 +60,7 @@ def generate_landscape_wfc(characters, connections, size0, size1):
             coords_top = (j_top, i)
             allowed_top = set(
                 flatten_list_of_lists(
-                    [connections[tile]["top"] for tile in wavefunction[j][i]]
+                    [tileset.connections[tile]["top"] for tile in wavefunction[j][i]]
                 )
             )
             forbidden_top = character_set - allowed_top
@@ -74,7 +74,7 @@ def generate_landscape_wfc(characters, connections, size0, size1):
             coords_right = (j, i_right)
             allowed_right = set(
                 flatten_list_of_lists(
-                    [connections[tile]["right"] for tile in wavefunction[j][i]]
+                    [tileset.connections[tile]["right"] for tile in wavefunction[j][i]]
                 )
             )
             forbidden_right = character_set - allowed_right
@@ -90,7 +90,7 @@ def generate_landscape_wfc(characters, connections, size0, size1):
             cords_bottom = (j_bottom, i)
             allowed_bottom = set(
                 flatten_list_of_lists(
-                    [connections[tile]["bottom"] for tile in wavefunction[j][i]]
+                    [tileset.connections[tile]["bottom"] for tile in wavefunction[j][i]]
                 )
             )
             forbidden_bottom = character_set - allowed_bottom
@@ -106,7 +106,7 @@ def generate_landscape_wfc(characters, connections, size0, size1):
             cords_left = (j, i_left)
             allowed_left = set(
                 flatten_list_of_lists(
-                    [connections[tile]["left"] for tile in wavefunction[j][i]]
+                    [tileset.connections[tile]["left"] for tile in wavefunction[j][i]]
                 )
             )
             forbidden_left = character_set - allowed_left
@@ -191,7 +191,7 @@ def run2():
     }
     characters = list(info.keys())
     landscape = generate_random(characters=characters, size0=size0, size1=size1)
-    plot_landscape(landscape=landscape, characters=info)
+    plot_landscape(landscape=landscape, tileset_info=info)
 
 
 def run3():
@@ -200,14 +200,8 @@ def run3():
 
     tileset = simple_tileset_factory()
 
-    info = tileset.info
-    connections = tileset.connections
-
-    characters = list(info.keys())
-    landscape = generate_landscape_wfc(
-        characters=characters, connections=connections, size0=size0, size1=size1
-    )
-    plot_landscape(landscape=landscape, characters=info)
+    landscape = generate_landscape_wfc(tileset=tileset, size0=size0, size1=size1)
+    plot_landscape(landscape=landscape, tileset_info=tileset.info)
 
 
 def run_buggy_coast():
@@ -218,11 +212,8 @@ def run_buggy_coast():
     info = tileset.info
     connections = tileset.connections
 
-    characters = list(info.keys())
-    landscape = generate_landscape_wfc(
-        characters=characters, connections=connections, size0=size0, size1=size1
-    )
-    plot_landscape(landscape=landscape, characters=info)
+    landscape = generate_landscape_wfc(tileset=tileset, size0=size0, size1=size1)
+    plot_landscape(landscape=landscape, tileset_info=info)
 
 
 def main():
