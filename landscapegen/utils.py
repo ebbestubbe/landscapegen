@@ -1,4 +1,5 @@
 import copy
+import math
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -54,3 +55,28 @@ def plot_incomplete(wavefunction, tileset):
                 # print(f"{jj}, {ii} is impossible")
     landscape = np.array(wavefunc2)
     plot_landscape(landscape=landscape, tileset_info=info)
+
+
+def get_mini_grid_size(tileset_info):
+    n_tiles = len(tileset_info.keys())
+
+    return math.pow(math.ceil(math.sqrt(n_tiles)), 2)
+
+
+def is_split_required(landscape):
+    ...
+
+
+def plotting_thing():
+    ...
+    # Split the incoming 3d arrays into a 2d array of 1d arrays.
+    # If the array has length 1, plot the plotting matrix should only plot that one thing.
+    # If there are more elements in the array, get the "mini_grid_size" of the wavefunction.
+    # 2,3,4-> 4
+    # 5,...9-> 9
+    # etc
+
+    # For each array, if it has length 1, it means the cell has been collapsed,
+    # plot that whole grid in that color.
+    # If the array is longer, color the first square in one color, then the next
+    # in the next color, etc. If any leftover, color with a "void" color.
