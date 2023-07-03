@@ -1,0 +1,21 @@
+
+tests
+    end to end
+        simple examples of landscapes
+
+    unit
+        collapse function
+        combination rules make sense check
+
+
+combination rules make sense check
+split into classes?
+
+extensions
+    probability on combination rules of wfc
+    Perlin noise? ( minecraft thing)
+    gaussion probability distributions on top of each other
+    animation of process - Good for debugging
+    Split every grid into smaller sections, so we can see what the "preliminary" result is
+    instead of legal/illegal: possibilty to spawn based on sorroundings.
+    add logging
