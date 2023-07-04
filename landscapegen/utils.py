@@ -63,12 +63,17 @@ def get_mini_grid_size(tileset_info):
     return math.pow(math.ceil(math.sqrt(n_tiles)), 2)
 
 
-def is_split_required(landscape):
-    ...
+def plotting_thing(wavefunction, tileset):
+    # If we dont need to split, the wavefunction is fully determined and we can
+    # just plot it as normally
+    determined = wavefunction.determined
+    if determined:
+        ...
+        # Use a normal plotting function
+        return
+    mini_grid_size = get_mini_grid_size(tileset_info=tileset.info)
+    # dims:
 
-
-def plotting_thing():
-    ...
     # Split the incoming 3d arrays into a 2d array of 1d arrays.
     # If the array has length 1, plot the plotting matrix should only plot that one thing.
     # If there are more elements in the array, get the "mini_grid_size" of the wavefunction.

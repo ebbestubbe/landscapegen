@@ -1,7 +1,7 @@
 from landscapegen.utils import get_mini_grid_size
 
 
-def test_landscape_1():
+def test_get_mini_grid_size_fit_1():
     info = {
         "Grass": [0, 1, 0, 1],
     }
@@ -10,7 +10,7 @@ def test_landscape_1():
     assert mini_grid_size == expected
 
 
-def test_landscape_2():
+def testget_mini_grid_size_2():
 
     info = {
         "Grass": [0, 1, 0, 1],
@@ -21,7 +21,7 @@ def test_landscape_2():
     assert mini_grid_size == expected
 
 
-def test_landscape_3():
+def test_get_mini_grid_size_fit_4():
     info = {
         "Grass": [0, 1, 0, 1],
         "Water": [0, 0, 1, 1],
@@ -33,7 +33,7 @@ def test_landscape_3():
     assert mini_grid_size == expected
 
 
-def test_landscape_4():
+def test_get_mini_grid_size_5():
     info = {
         "Grass": [0, 1, 0, 1],
         "Water": [0, 0, 1, 1],

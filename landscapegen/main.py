@@ -253,7 +253,7 @@ def plot_example():
         [["Grass"], ["Grass"], ["Grass"], ["Grass"], ["Grass"]],
         [["Sand"], ["Water"], ["Grass"], ["Grass"], ["Grass"]],
     ]
-
+    wavefunction = Wavefunction(landscape)
     plot_incomplete(wavefunction=landscape, tileset=tileset)
     plt.show()
 
