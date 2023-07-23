@@ -19,3 +19,5 @@ extensions
     Split every grid into smaller sections, so we can see what the "preliminary" result is
     instead of legal/illegal: possibilty to spawn based on sorroundings.
     add logging
+
+    Button to increase order / button to shuffle?
