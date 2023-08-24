@@ -1,4 +1,4 @@
-from tileset import Tileset_wfc
+from landscapegen.tileset import Tileset_wfc
 
 
 def coast_boundary_factory():

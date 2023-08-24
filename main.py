@@ -3,14 +3,16 @@ import random
 
 import matplotlib.pyplot as plt
 import numpy as np
-from factory import coast_boundary_factory
-from factory import simple_tileset_factory
-from generators.random import generate_random
+from landscapegen.factory import coast_boundary_factory
+from landscapegen.factory import simple_tileset_factory
+from landscapegen.generators.random import generate_random
 from matplotlib.colors import ListedColormap
-from utils import flatten_list_of_lists
-from utils import plot_incomplete
-from utils import plot_landscape
-
+from landscapegen.utils import flatten_list_of_lists
+from landscapegen.utils import plot_incomplete
+from landscapegen.utils import plotting_thing
+from landscapegen.utils import plot_landscape
+from landscapegen.utils import subdivide_grid
+from landscapegen.wavefunction import Wavefunction
 
 def collapse(point, remove_in, wavefunction, tileset, size0, size1):
     character_set = set(tileset.characters)
@@ -238,11 +240,12 @@ def run_buggy_coast():
     plot_landscape(landscape=landscape, tileset_info=tileset.info)
 
 
-def plot_example():
+def plot_example_determined():
     # size0 = 4
     # size1 = 3
 
     tileset = simple_tileset_factory()
+    tileset = coast_boundary_factory()
     # wavefunction = [
     #     [tileset.characters for _1 in range(size0)] for _2 in range(size1)
     # ]  # Array of all the possible tiles at this point
@@ -254,12 +257,59 @@ def plot_example():
         [["Sand"], ["Water"], ["Grass"], ["Grass"], ["Grass"]],
     ]
     wavefunction = Wavefunction(landscape)
-    plot_incomplete(wavefunction=landscape, tileset=tileset)
+    #plotting_thing(wavefunction=wavefunction, tileset=tileset)
+    split = subdivide_grid(wavefunction=wavefunction, tileset=tileset)
+    #plot_incomplete(wavefunction=split.wf, tileset=tileset)
+    plotting_thing(wavefunction=split, tileset=tileset)
     plt.show()
 
 
+
+def plot_example_undetermined():
+    # size0 = 4
+    # size1 = 3
+
+    #tileset = simple_tileset_factory()
+    tileset = coast_boundary_factory()
+    # wavefunction = [
+    #     [tileset.characters for _1 in range(size0)] for _2 in range(size1)
+    # ]  # Array of all the possible tiles at this point
+    landscape = [
+        [["Grass"], ["Grass"], ["Grass"], ["Grass"], ["Grass"]],
+        [["Sand"], ["Water"], ["Grass"], ["Grass"], ["Grass"]],
+        [["Sand"], ["Sand"], ["Grass", "Water"], ["Grass"], ["Grass"]],
+        [["Grass"], ["Grass"], ["Grass"], ["Grass"], ["Grass"]],
+        [["Sand"], ["Water"], ["Grass"], ["Grass"], ["Grass"]],
+    ]
+    wavefunction = Wavefunction(landscape)
+    fig,ax = plotting_thing(wavefunction=wavefunction, tileset=tileset)
+    #Almost, just need to take care of the 'blanks
+    #plot_incomplete(wavefunction=landscape, tileset=tileset)
+    plt.show()
+
+def plot_example_undetermined_small():
+    # size0 = 4
+    # size1 = 3
+
+    #tileset = simple_tileset_factory()
+    tileset = coast_boundary_factory()
+    # wavefunction = [
+    #     [tileset.characters for _1 in range(size0)] for _2 in range(size1)
+    # ]  # Array of all the possible tiles at this point
+    landscape = [
+        [["Grass", "Water"], ["Grass"]],
+        [["Sand"], ["Water"]],
+    ]
+    wavefunction = Wavefunction(landscape)
+    fig,ax = plotting_thing(wavefunction=wavefunction, tileset=tileset)
+    #Almost, just need to take care of the 'blanks
+    #plot_incomplete(wavefunction=landscape, tileset=tileset)
+    plt.show()
+
 def main():
-    plot_example()
+    plot_example_determined()
+    #plot_example_undetermined_small()
+    #plot_example_undetermined()
     # run_buggy_coast()
     # run3()
 

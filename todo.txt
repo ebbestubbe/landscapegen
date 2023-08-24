@@ -10,6 +10,8 @@ tests
 
 combination rules make sense check
 split into classes?
+    Make the wavefunction contain list of list of sets, instead of list of list of lists 
+    [[[]]] -> [[{}]]
 
 extensions
     probability on combination rules of wfc
