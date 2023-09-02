@@ -21,6 +21,7 @@ class Wavefunction:
                 if not set(self.wf[j][i]) == set(other.wf[j][i]):
                     return False
         return True
+
     @property
     def collapsed(self):
         # Go through all points and figure out of there are more than 1 element
@@ -30,3 +31,12 @@ class Wavefunction:
                 if len(col) > 1:
                     return False
         return True
+
+    @property
+    def contains_blank(self):
+        for i, row in enumerate(self.wf):
+            for j, col in enumerate(row):
+                if col[0] == "__BLANK__":
+                    return True
+
+        return False
