@@ -260,7 +260,7 @@ def plot_example_determined():
     ]
     wavefunction = Wavefunction(landscape)
     # plotting_thing(wavefunction=wavefunction, tileset=tileset)
-    split = subdivide_grid(wavefunction=wavefunction, tileset=tileset)
+    split, grid_size = subdivide_grid(wavefunction=wavefunction, tileset=tileset)
     # plot_incomplete(wavefunction=split.wf, tileset=tileset)
     plotting_thing(wavefunction=split, tileset=tileset)
     plt.show()
@@ -279,7 +279,7 @@ def plot_example_undetermined():
         [["Grass"], ["Grass"], ["Grass"], ["Grass"], ["Grass"]],
         [["Sand"], ["Water"], ["Grass"], ["Grass"], ["Grass"]],
         [["Sand"], ["Sand"], ["Grass", "Water"], ["Grass"], ["Grass"]],
-        [["Grass"], ["Grass"], ["Grass"], ["Grass"], ["Grass"]],
+        [["Grass"], ["Grass"], ["Grass"], ["Grass"], ["Grass", "Sand"]],
         [["Sand"], ["Water"], ["Grass"], ["Grass"], ["Grass"]],
     ]
     wavefunction = Wavefunction(landscape)
@@ -299,7 +299,7 @@ def plot_example_undetermined_small():
     #     [tileset.characters for _1 in range(size0)] for _2 in range(size1)
     # ]  # Array of all the possible tiles at this point
     landscape = [
-        [["Grass", "Water"], ["Grass"]],
+        [["Grass", "Sand"], ["Grass"]],
         [["Sand"], ["Water"]],
     ]
     wavefunction = Wavefunction(landscape)
@@ -331,12 +331,13 @@ def plot_example_determined_small():
 
 def main():
     # plot_example_determined()
+    plot_example_undetermined()
     # plot_example_determined_small()
-    plot_example_undetermined_small()
-    # plot_example_undetermined()
+    # plot_example_undetermined_small()
+
     # run_buggy_coast()
     # run3()
-
+    ...
     # plt.show()
 
 

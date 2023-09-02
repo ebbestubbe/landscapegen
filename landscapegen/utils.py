@@ -73,7 +73,7 @@ def get_mini_grid_size(tileset_info):
     return math.ceil(math.sqrt(n_tiles))
 
 
-def plotting_thing_landscape(wavefunction, tileset):
+def plotting_thing_landscape(wavefunction, tileset, minor_grid_size=1):
     char_dict = {c: i for i, c in enumerate(tileset.characters)}  # tile: value
 
     # Issue is that now the wavefunction might also contain "__BLANK__"  contains 1 more color than tileset.characters,
@@ -103,13 +103,13 @@ def plotting_thing_landscape(wavefunction, tileset):
     minval = min(char_dict.values())
     maxval = max(char_dict.values())
     cax = ax.imshow(values, cmap, rasterized=True, vmin=minval, vmax=maxval)
-    cbar = fig.colorbar(cax, cmap=cmap, ticks=np.arange(0, len(tileset_info)) + 0.5)
+    cbar = fig.colorbar(cax, cmap=cmap, ticks=np.arange(minval, maxval + 1) + 0.5)
     cbar.ax.set_yticklabels(tileset_characters)
     # dontuse ax.set_xticks(np.arange(-.5, 10, 1), minor=True)
     # dontuse ax.set_yticks(np.arange(-.5, 10, 1), minor=True)
-    # ax.set_xticks(np.arange(-0.5, wavefunction.size1, 1), minor=True)
-    # ax.set_yticks(np.arange(-0.5, wavefunction.size0, 1), minor=True)
-    # ax.grid(which="minor", color="w", linestyle="-", linewidth=2)
+    ax.set_xticks(np.arange(-0.5, wavefunction.size1, minor_grid_size), minor=True)
+    ax.set_yticks(np.arange(-0.5, wavefunction.size0, minor_grid_size), minor=True)
+    ax.grid(which="minor", color="w", linestyle="-", linewidth=2)
     # ax.grid()
     return fig, ax
 
@@ -148,7 +148,7 @@ def subdivide_grid(wavefunction: Wavefunction, tileset: Tileset_wfc):
                             mylist[mgj][mgi] = ["__BLANK__"]
                         square_ind = square_ind + 1
 
-    return Wavefunction(mylist)
+    return Wavefunction(mylist), mini_grid_size
 
 
 def plotting_thing(wavefunction: Wavefunction, tileset: Tileset_wfc):
@@ -158,8 +158,10 @@ def plotting_thing(wavefunction: Wavefunction, tileset: Tileset_wfc):
     if determined:  # Use a normal plotting function
         fig, ax = plotting_thing_landscape(wavefunction=wavefunction, tileset=tileset)
         return fig, ax
-    subdivided = subdivide_grid(wavefunction=wavefunction, tileset=tileset)
-    fig, ax = plotting_thing_landscape(wavefunction=subdivided, tileset=tileset)
+    subdivided, grid_size = subdivide_grid(wavefunction=wavefunction, tileset=tileset)
+    fig, ax = plotting_thing_landscape(
+        wavefunction=subdivided, tileset=tileset, minor_grid_size=grid_size
+    )
     return fig, ax
 
     # dims:
