@@ -1,0 +1,46 @@
+tests:
+    end to end:
+        ☐ simple examples of landscapes
+
+    unit:
+        ☐ collapse function
+        ☐ combination rules make sense check
+
+
+
+
+plotting:
+
+    matplotlib:
+        ✘ Just pixel positions instead of a plot @cancelled(25-10-06 22:08)
+    alternatives:
+        ✔ Try pygame @done(25-10-06 22:07)
+        ✔ Try tkinter @done(25-10-06 22:07)
+        ✔ try PyQt6 @done(25-10-06 22:07)
+
+    ☐ migrate to pyqt6!
+collapsing:
+    ☐ Collapse
+
+Data structures:
+    ☐ General cleanup
+    ☐ Make some dataclasses for this
+    ☐ Pydantic?
+
+extensions:
+    ☐ combination rules make sense check
+    ☐ clickable bitmap
+    ☐ animation of process - Good for debugging
+    ☐ probability on combination rules of wfc
+    ☐ Split every grid into smaller sections, so we can see what the "preliminary" result is
+    ☐ add logging
+
+other stuff:
+    ☐ Perlin noise? ( minecraft thing)
+    ☐ gaussion probability distributions on top of each other
+
+
+???:
+    ☐ instead of legal/illegal: possibilty to spawn based on sorroundings.
+    ☐ Button to increase order / button to shuffle?
+    ☐ animate wfc process

@@ -242,6 +242,16 @@ def run_buggy_coast():
     plot_landscape(landscape=landscape, tileset_info=tileset.info)
 
 
+def run_buggy_coast2():
+    size0 = 4
+    size1 = 3
+
+    tileset = coast_boundary_factory()
+
+    landscape = generate_landscape_wfc(tileset=tileset, size0=size0, size1=size1)
+    plotting_thing(wavefunction=Wavefunction(landscape), tileset=tileset)
+
+
 def plot_example_determined():
     # size0 = 4
     # size1 = 3
@@ -320,7 +330,7 @@ def plot_example_determined_small():
     # ]  # Array of all the possible tiles at this point
     landscape = [
         [["Water"], ["Grass"]],
-        [["Sand"], ["Water"]],
+        [["Sand"], ["Water", "Grass"]],
     ]
     wavefunction = Wavefunction(landscape)
     fig, ax = plotting_thing(wavefunction=wavefunction, tileset=tileset)
@@ -331,15 +341,18 @@ def plot_example_determined_small():
 
 def main():
     # plot_example_determined()
-    plot_example_undetermined()
+    # plot_example_undetermined()
     # plot_example_determined_small()
     # plot_example_undetermined_small()
 
-    # run_buggy_coast()
+    plot_example_determined_small()
+
     # run3()
-    ...
-    # plt.show()
+    # run3()
+
+    plt.show()
 
 
 if __name__ == "__main__":
+
     main()
