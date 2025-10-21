@@ -1,13 +1,16 @@
 import random
 import sys
 
+from PyQt6.QtCore import QSize
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import QTimer
+from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtWidgets import QCheckBox
 from PyQt6.QtWidgets import QHBoxLayout
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtWidgets import QWidget
+
 
 COLOR_POOL = ["red", "green", "blue", "yellow", "purple", "orange"]
 
@@ -29,12 +32,18 @@ class ColorTilesApp(QWidget):
         for i in range(4):
             btn = QPushButton("")
             btn.setFixedSize(100, 100)
-            btn.setStyleSheet(
-                f"background-color: {self.colors[i]}; border: 2px solid black;"
-            )
+            btn.setStyleSheet(f"background-color: {self.colors[i]};")
             btn.clicked.connect(lambda checked, index=i: self.handle_click(index))
             self.tiles.append(btn)
             self.layout.addWidget(btn)
+
+        button = QPushButton()
+        button.setFixedSize(50, 50)
+        button.setIconSize(QSize(100, 100))
+        self.layout.addWidget(button)
+        icon = QIcon("image.jpg")
+        button.setIcon(icon)
+        button.setStyleSheet(f"background-color: black; border: 2px solid black;")
 
         # Black mode checkbox (alternative to Ctrl for desktop app)
         self.black_mode_checkbox = QCheckBox("Black Mode (Ctrl-click also sets black)")

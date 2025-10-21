@@ -18,7 +18,24 @@ plotting:
         ✔ Try tkinter @done(25-10-06 22:07)
         ✔ try PyQt6 @done(25-10-06 22:07)
 
-    ☐ migrate to pyqt6!
+    migrate to pyqt6:
+        investigate:
+            ✔ Can add pictures @done(25-10-21 20:15)
+            ✔ Can make grid of buttons @done(25-10-21 20:22)
+            ✔ can remove borders @done(25-10-21 20:22)
+            ✔ can make clickable @done(25-10-21 20:22)
+        migrate current:
+            ☐ Plot collapsed wf. No button action
+            ☐ Plot uncollapsed wf.
+            ☐ Collapse full with button click
+            ☐ Collapse single cell with button click
+            ☐ Show which tiles are possible
+            ☐ Choose specific tile
+        Add pixel tiles:
+            ...
+
+
+
 collapsing:
     ☐ Collapse
 
