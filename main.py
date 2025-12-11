@@ -137,10 +137,19 @@ def collapse(point, remove_in, wavefunction, tileset, size0, size1):
             )
 
 
-def generate_landscape_wfc(tileset, size0, size1):
+def generate_landscape_wfc(tileset, size0=None, size1=None, height=None, width=None):
+    assert (size1 is None and height is not None) or (
+        size1 is not None and height is None
+    )  # legacy fix, use height instead of size1
+    assert (size0 is None and width is not None) or (
+        size0 is not None and width is None
+    )  # legacy fix, use width instead of size0
+
+    height = height or size1
+    width = width or size0
 
     wavefunction = [
-        [tileset.characters for _1 in range(size0)] for _2 in range(size1)
+        [tileset.characters for _1 in range(width)] for _0 in range(height)
     ]  # Array of all the possible tiles at this point
 
     flat_coords = get_flat_coords_of_undetermined(wavefunction=wavefunction)
@@ -158,10 +167,11 @@ def generate_landscape_wfc(tileset, size0, size1):
         forbidden = set(wavefunction[point[0]][point[1]]) - set([choice])
 
         # print(point, wavefunction[point[0]][point[1]], choice)
-        collapse(point, forbidden, wavefunction, tileset, size0, size1)
+        collapse(point, forbidden, wavefunction, tileset, width, height)
         # plot_incomplete(wavefunction=wavefunction)
         flat_coords = get_flat_coords_of_undetermined(wavefunction=wavefunction)
         iter = iter + 1
+    return Wavefunction(wavefunction)
     return np.array(wavefunction)
 
 
@@ -339,18 +349,50 @@ def plot_example_determined_small():
     plt.show()
 
 
+def plot_example_pyqt():
+
+    tileset = coast_boundary_factory()
+    landscape = [
+        [["Grass"], ["Grass"], ["Grass"], ["Grass"], ["Grass"]],
+        [["Sand"], ["Water"], ["Grass"], ["Grass"], ["Grass"]],
+        [["Sand"], ["Sand"], ["Grass"], ["Grass"], ["Grass"]],
+        [["Grass"], ["Grass"], ["Grass"], ["Grass"], ["Grass"]],
+        [["Sand"], ["Water"], ["Grass"], ["Grass"], ["Grass"]],
+    ]
+    wavefunction = Wavefunction(landscape)
+    # plotting_thing(wavefunction=wavefunction, tileset=tileset)
+    split, grid_size = subdivide_grid(wavefunction=wavefunction, tileset=tileset)
+    # plot_incomplete(wavefunction=split.wf, tileset=tileset)
+    plotting_thing(wavefunction=split, tileset=tileset)
+    from landscapegen.pygqt_plotting import pyqt_plot
+
+    pyqt_plot(wavefunction=wavefunction, tileset=tileset)
+
+
+def plot_example_pyqt_2():
+    height = 10
+    width = 15
+
+    tileset = simple_tileset_factory()
+
+    wavefunction = generate_landscape_wfc(tileset=tileset, height=height, width=width)
+    from landscapegen.pygqt_plotting import pyqt_plot
+
+    pyqt_plot(wavefunction=wavefunction, tileset=tileset)
+
+
 def main():
     # plot_example_determined()
     # plot_example_undetermined()
     # plot_example_determined_small()
     # plot_example_undetermined_small()
 
-    plot_example_determined_small()
+    # plot_example_determined_small()
 
     # run3()
-    # run3()
-
-    plt.show()
+    # plt.show()
+    # plot_example_pyqt()
+    plot_example_pyqt_2()
 
 
 if __name__ == "__main__":

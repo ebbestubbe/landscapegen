@@ -1,5 +1,8 @@
+from typing import List
+
+
 class Wavefunction:
-    def __init__(self, wf):
+    def __init__(self, wf: List[List[List[str]]]):
         # wf is a triple array where the first 2 dimensions are rectangular, and
         # the contents are arrays of strings,  eg:
         # wf = [
@@ -8,8 +11,10 @@ class Wavefunction:
         #     [["Sand"], ["Sand", "Grass"]],
         # ]
         self.wf = wf
-        self.size0 = len(wf)
-        self.size1 = len(wf[0])
+        self.size0 = len(wf[0])
+        self.size1 = len(wf)
+        self.width = self.size0
+        self.height = self.size1
 
     def __eq__(self, other):
         if not isinstance(other, Wavefunction):
