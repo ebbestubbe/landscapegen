@@ -1,4 +1,3 @@
-import random
 import sys
 
 from PyQt6.QtWidgets import QApplication
@@ -8,14 +7,6 @@ from PyQt6.QtWidgets import QWidget
 
 from landscapegen.tileset import Tileset_wfc
 from landscapegen.wavefunction import Wavefunction
-
-color_dict = {
-    "Grass": "green",
-    "Sand": "yellow",
-    "Water": "blue",
-    "Cliff": "black",
-    "Lava": "red",
-}
 
 
 class ColorTilesApp(QWidget):
@@ -35,27 +26,19 @@ class ColorTilesApp(QWidget):
 
         self.tiles = [[] for x in range(self.height)]
 
-        self.colors = [
-            [color_dict[wavefunction.wf[h][w][0]] for w in range(self.width)]
-            for h in range(self.height)
-        ]
         for i in range(self.height):
             for j in range(self.width):
 
                 btn = QPushButton("")
-                btn.setFixedSize(100, 100)
-                color = self.colors[i][j]
-                # color = random.choice(COLOR_POOL)
-                btn.setStyleSheet(  # This is some chatgpt magic for setting the color.
-                    f"background-color: {color}; border: 0px solid black;"
+                btn.setFixedSize(50, 50)
+                rgba_color = [
+                    int(part * 255) for part in tileset.info[wavefunction.wf[i][j][0]]
+                ]
+
+                btn.setStyleSheet(
+                    f"background-color: rgba{tuple(rgba_color)}; border: 0px solid black;"
                 )
-                # btn.setStyleSheet( # This is some chatgpt magic for setting the color.
-                #     f"background-color: {color}; border: 2px solid black;"
-                # )
-                # This is where we define what arguments to give to the "handle click" function. (i,j) as input is defined here.
-                # btn.clicked.connect(
-                #     lambda checked, index=(i, j): self.handle_click(index)
-                # )
+
                 self.tiles[i].append(btn)
                 self.layout.addWidget(btn, i, j)
 
