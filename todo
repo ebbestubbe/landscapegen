@@ -28,7 +28,7 @@ plotting:
             ✔ can remove borders @done(25-10-21 20:22)
             ✔ can make clickable @done(25-10-21 20:22)
         migrate current:
-            ☐ Plot collapsed wf. No button action
+            ✔ Plot collapsed wf. No button action @done(25-12-11 23:00)
             ☐ Plot uncollapsed wf.
             ☐ Collapse full with button click
             ☐ Collapse single cell with button click
