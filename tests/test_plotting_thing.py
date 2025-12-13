@@ -1,6 +1,6 @@
+from landscapegen.matplotlib_plotting import get_mini_grid_size
+from landscapegen.matplotlib_plotting import subdivide_grid
 from landscapegen.tileset import Tileset_wfc
-from landscapegen.utils import get_mini_grid_size
-from landscapegen.utils import subdivide_grid
 from landscapegen.wavefunction import Wavefunction
 
 

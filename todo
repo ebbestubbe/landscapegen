@@ -13,9 +13,11 @@ ongiong:
     ☐ Pre-make the unfinished grid, so its more performant
     ☐ Just a pixel image instead of buttons? Probably also more performant.
     ☐ remove old plotting code and everything that relies on it
-    ☐ landscape vs wavefunction confusion
+    ☐ landscape vs wavefunction confusion(Also 'Wavefunction' class has a 'self.wavefunction' property)
     ☐ fix better undetermined color, like pink/white grid texture?
     ☐ Border around undetermined cells, to make it easier to see which are undetermined?
+    ☐ to_remove vs forbidden vs chosen in collapse() function usage.
+
 
 
 plotting:
@@ -36,7 +38,7 @@ plotting:
         migrate current:
             ✔ Plot collapsed wf. No button action @done(25-12-11 23:00)
             ✔ Plot uncollapsed wf. @done(25-12-13 18:25)
-            ☐ Plot completely undetermined grid
+            ✔ Plot completely undetermined grid @done(25-12-13 19:55)
             ☐ Collapse full with button click
             ☐ Collapse single cell with button click
             ☐ Show which tiles are possible
