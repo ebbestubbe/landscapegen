@@ -17,6 +17,7 @@ major_pixels = 60
 
 class ColorTilesApp(QWidget):
     def __init__(self, wavefunction: Wavefunction, tileset: Tileset_wfc):
+
         super().__init__()
         self.setWindowTitle("Color Tiles with Ctrl Click (PyQt6)")
         # Layout
@@ -30,6 +31,10 @@ class ColorTilesApp(QWidget):
         self.tileset = tileset
         self.width = self.wavefunction.width
         self.height = self.wavefunction.height
+
+        self.cell_widgets = [
+            [None for _ in range(self.width)] for _ in range(self.height)
+        ]
 
         # self.tiles = [[] for x in range(self.height)] #TODO figure out if this is used?
 
@@ -53,8 +58,9 @@ class ColorTilesApp(QWidget):
                         f"background-color: rgba{tuple(rgba_color)}; border: 0px solid black;"
                     )
 
-                    # self.tiles[i].append(btn)`#TODO figure out if this is used?`
+                    self.cell_widgets[i][j] = btn
                     self.layout.addWidget(btn, i, j)
+
                 else:  # This cell is not determined! We need to plot all possibilities.
                     container = QWidget()
                     small_layout = QGridLayout(container)  # Make a smaller layout here.
@@ -90,6 +96,7 @@ class ColorTilesApp(QWidget):
                             small_layout.addWidget(btn, small_i, small_j)
                             inner_i += 1
 
+                    self.cell_widgets[i][j] = container
                     self.layout.addWidget(
                         container, i, j
                     )  # Add the finished layout to the position in the cell.
@@ -98,7 +105,7 @@ class ColorTilesApp(QWidget):
         print(i, j, chosen)
         point = (i, j)
         wf = self.wavefunction.wf
-        remove_in = set(wf[point[0]][point[1]]) - set([chosen])
+        remove_in = set(wf[i][j]) - set([chosen])
 
         collapse(
             point=point,
@@ -110,6 +117,59 @@ class ColorTilesApp(QWidget):
         )
         self.wavefunction = Wavefunction(wf)
         print(self.wavefunction)
+        affected = []
+        for i in range(self.height):
+            for j in range(self.width):
+                affected.append([i, j])
+        for (x, y) in affected:
+            self.render_cell(x, y)
+
+    def render_cell(self, i, j):
+        cell = self.wavefunction.wf[i][j]
+
+        # Remove old widget
+        old = self.cell_widgets[i][j]
+        if old:
+            self.layout.removeWidget(old)
+            old.deleteLater()
+
+        if len(cell) == 1:
+            btn = QPushButton("")
+            btn.setFixedSize(major_pixels, major_pixels)
+            rgba = [int(c * 255) for c in self.tileset.info[cell[0]]]
+            btn.setStyleSheet(f"background-color: rgba{tuple(rgba)}; border: 0px;")
+            widget = btn
+        else:
+            widget = QWidget()
+            layout = QGridLayout(widget)
+            layout.setSpacing(0)
+            layout.setContentsMargins(0, 0, 0, 0)
+            widget.setFixedSize(major_pixels, major_pixels)
+
+            minor_gridsize = math.ceil(math.sqrt(len(self.tileset.info)))
+            minor_pixels = major_pixels // minor_gridsize
+
+            idx = 0
+            for x in range(minor_gridsize):
+                for y in range(minor_gridsize):
+                    btn = QPushButton("")
+                    btn.setFixedSize(minor_pixels, minor_pixels)
+
+                    if idx < len(cell):
+                        tile = cell[idx]
+                        rgba = [int(c * 255) for c in self.tileset.info[tile]]
+                        btn.clicked.connect(partial(self.collapse_cell, i, j, tile))
+                    else:
+                        rgba = [0, 0, 0, 255]
+
+                    btn.setStyleSheet(
+                        f"background-color: rgba{tuple(rgba)}; border: 0px;"
+                    )
+                    layout.addWidget(btn, x, y)
+                    idx += 1
+
+        self.cell_widgets[i][j] = widget
+        self.layout.addWidget(widget, i, j)
 
 
 def pyqt_plot(wavefunction: Wavefunction, tileset: Tileset_wfc):
