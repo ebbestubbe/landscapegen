@@ -9,7 +9,13 @@ tests:
 
 
 ongiong:
-    ☐ Confusion between height and width. Need extra abstraction?
+    ✔ Confusion between height and width. Need extra abstraction? @done(25-12-13 19:14)
+    ☐ Pre-make the unfinished grid, so its more performant
+    ☐ Just a pixel image instead of buttons? Probably also more performant.
+    ☐ remove old plotting code and everything that relies on it
+    ☐ landscape vs wavefunction confusion
+    ☐ fix better undetermined color, like pink/white grid texture?
+    ☐ Border around undetermined cells, to make it easier to see which are undetermined?
 
 
 plotting:
@@ -36,15 +42,8 @@ plotting:
             ☐ Show which tiles are possible
             ☐ Choose specific tile
         Add pixel tiles:
-            ...
-        Niceify:
-            ☐ Pre-make the unfinished grid, so its more performant
-            ☐ Just a pixel image instead of buttons? Probably also more performant.
+            like a pixel tile with forest/lake/stream/road etc.
 
-
-
-collapsing:
-    ☐ Collapse
 
 Data structures:
     ☐ General cleanup

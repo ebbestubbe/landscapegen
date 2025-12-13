@@ -149,9 +149,9 @@ def generate_landscape_wfc(tileset, size0=None, size1=None, height=None, width=N
     height = height or size1
     width = width or size0
 
-    wavefunction = [
-        [tileset.characters for _1 in range(width)] for _0 in range(height)
-    ]  # Array of all the possible tiles at this point
+    wavefunction = generate_undertermined_wavefunction(
+        tileset, height=height, width=width
+    )
 
     flat_coords = get_flat_coords_of_undetermined(wavefunction=wavefunction)
     iter = 0
@@ -174,6 +174,14 @@ def generate_landscape_wfc(tileset, size0=None, size1=None, height=None, width=N
         iter = iter + 1
     return Wavefunction(wavefunction)
     return np.array(wavefunction)
+
+
+def generate_undertermined_wavefunction(tileset, height, width):
+
+    wavefunction = [
+        [tileset.characters for _1 in range(width)] for _0 in range(height)
+    ]  # Array of all the possible tiles at this point
+    return wavefunction
 
 
 def get_flat_coords_of_undetermined(wavefunction):
@@ -397,6 +405,28 @@ def plot_example_pyqt_undertermined():
     pyqt_plot(wavefunction=wavefunction, tileset=tileset)
 
 
+def plot_completely_undetermined_coast():
+    height = 7
+    width = 10
+    tileset = coast_boundary_factory()
+    wavefunction = generate_undertermined_wavefunction(
+        tileset=tileset, height=height, width=width
+    )
+    wavefunction = Wavefunction(wavefunction)
+    pyqt_plot(wavefunction=wavefunction, tileset=tileset)
+
+
+def plot_completely_undetermined_simple():
+    height = 7
+    width = 10
+    tileset = simple_tileset_factory()
+    wavefunction = generate_undertermined_wavefunction(
+        tileset=tileset, height=height, width=width
+    )
+    wavefunction = Wavefunction(wavefunction)
+    pyqt_plot(wavefunction=wavefunction, tileset=tileset)
+
+
 def main():
     # plot_example_determined()
     # plot_example_undetermined()
@@ -407,9 +437,12 @@ def main():
 
     # run3()
     # plt.show()
+
     # plot_example_pyqt()
-    plot_example_pyqt_2()
+    # plot_example_pyqt_2()
     # plot_example_pyqt_undertermined()
+    # plot_completely_undetermined_coast()
+    plot_completely_undetermined_simple()
 
 
 if __name__ == "__main__":
