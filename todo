@@ -29,13 +29,17 @@ plotting:
             ✔ can make clickable @done(25-10-21 20:22)
         migrate current:
             ✔ Plot collapsed wf. No button action @done(25-12-11 23:00)
-            ☐ Plot uncollapsed wf.
+            ✔ Plot uncollapsed wf. @done(25-12-13 18:25)
+            ☐ Plot completely undetermined grid
             ☐ Collapse full with button click
             ☐ Collapse single cell with button click
             ☐ Show which tiles are possible
             ☐ Choose specific tile
         Add pixel tiles:
             ...
+        Niceify:
+            ☐ Pre-make the unfinished grid, so its more performant
+            ☐ Just a pixel image instead of buttons? Probably also more performant.
 
 
 

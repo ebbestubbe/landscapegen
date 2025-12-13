@@ -8,6 +8,7 @@ from matplotlib.colors import ListedColormap
 from landscapegen.factory import coast_boundary_factory
 from landscapegen.factory import simple_tileset_factory
 from landscapegen.generators.random import generate_random
+from landscapegen.pygqt_plotting import pyqt_plot
 from landscapegen.utils import flatten_list_of_lists
 from landscapegen.utils import plot_incomplete
 from landscapegen.utils import plot_landscape
@@ -381,6 +382,21 @@ def plot_example_pyqt_2():
     pyqt_plot(wavefunction=wavefunction, tileset=tileset)
 
 
+def plot_example_pyqt_undertermined():
+
+    tileset = coast_boundary_factory()
+    landscape = [
+        [["Grass"], ["Grass"], ["Grass"], ["Grass"], ["Grass"]],
+        [["Sand"], ["Water"], ["Grass"], ["Grass"], ["Grass"]],
+        [["Sand"], ["Sand"], ["Grass", "Water"], ["Grass"], ["Grass"]],
+        [["Grass"], ["Grass"], ["Grass"], ["Grass"], ["Grass", "Sand"]],
+        [["Sand"], ["Water"], ["Grass"], ["Grass"], ["Grass"]],
+    ]
+    wavefunction = Wavefunction(landscape)
+
+    pyqt_plot(wavefunction=wavefunction, tileset=tileset)
+
+
 def main():
     # plot_example_determined()
     # plot_example_undetermined()
@@ -393,6 +409,7 @@ def main():
     # plt.show()
     # plot_example_pyqt()
     plot_example_pyqt_2()
+    # plot_example_pyqt_undertermined()
 
 
 if __name__ == "__main__":
