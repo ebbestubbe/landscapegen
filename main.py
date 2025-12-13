@@ -321,8 +321,8 @@ def main():
     # plot_example_pyqt()
     # plot_example_pyqt_2()
     # plot_example_pyqt_undertermined()
-    plot_completely_undetermined_coast()
-    # plot_completely_undetermined_simple()
+    # plot_completely_undetermined_coast()
+    plot_completely_undetermined_simple()
 
 
 if __name__ == "__main__":
