@@ -14,7 +14,7 @@ efficiency:
 
 ongiong:
     ✔ Confusion between height and width. Need extra abstraction? @done(25-12-13 19:14)
-    ☐ remove old plotting code and everything that relies on it
+    ✔ remove old plotting code and everything that relies on it @done(25-12-14 18:30)
     ☐ landscape vs wavefunction confusion(Also 'Wavefunction' class has a 'self.wavefunction' property)
     ☐ fix better undetermined color, like pink/white grid texture?
     ☐ Border around undetermined cells, to make it easier to see which are undetermined?

@@ -10,7 +10,6 @@ def coast_boundary_factory():
         W: [0, 0, 1, 1],
         S: [1, 1, 0, 1],
     }
-    color_dict = {G: "green", S: "yellow", W: "blue"}
     connections = {
         G: {
             "top": [G],

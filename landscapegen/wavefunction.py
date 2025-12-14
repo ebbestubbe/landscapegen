@@ -1,3 +1,4 @@
+import random
 from typing import List
 
 from landscapegen.utils import flatten_list_of_lists
@@ -168,3 +169,74 @@ def collapse(point, remove_in, wavefunction, tileset, width, height):
                 width=width,
                 height=height,
             )
+
+
+def generate_landscape_wfc(tileset, size0=None, size1=None, height=None, width=None):
+    assert (size1 is None and height is not None) or (
+        size1 is not None and height is None
+    )  # legacy fix, use height instead of size1
+    assert (size0 is None and width is not None) or (
+        size0 is not None and width is None
+    )  # legacy fix, use width instead of size0
+
+    height = height or size1
+    width = width or size0
+
+    wavefunction = generate_undertermined_wavefunction(
+        tileset, height=height, width=width
+    )
+
+    flat_coords = get_flat_coords_of_undetermined(wavefunction=wavefunction)
+    iter = 0
+    while len(flat_coords) > 0:  # While we still have to figure out some coordinates.
+        point = random.choice(flat_coords)  # Random point to collapse
+        choice = random.choice(wavefunction[point[0]][point[1]])  #
+        # # Debug coast boundary
+        # if iter == 0:
+        #     point = (1, 0)
+        #     choice = "Sand"
+        # if iter == 1:
+        #     point = (1, 3)
+        #     choice = "Sand"
+        forbidden = set(wavefunction[point[0]][point[1]]) - set([choice])
+
+        # print(point, wavefunction[point[0]][point[1]], choice)
+        collapse(point, forbidden, wavefunction, tileset, width, height)
+        # plot_incomplete(wavefunction=wavefunction)
+        flat_coords = get_flat_coords_of_undetermined(wavefunction=wavefunction)
+        iter = iter + 1
+    return Wavefunction(wavefunction)
+
+
+def generate_undertermined_wavefunction(tileset, height, width):
+
+    wavefunction = [
+        [tileset.characters for _1 in range(width)] for _0 in range(height)
+    ]  # Array of all the possible tiles at this point
+    return wavefunction
+
+
+def get_flat_coords_of_undetermined(wavefunction):
+    undetermined = get_undetermined(wavefunction=wavefunction)
+    coords_of_undetermined = get_coordinates_of_undetermined(
+        wavefunction=wavefunction, undetermined=undetermined
+    )
+    flat_coords = flatten_list_of_lists(list_of_lists=coords_of_undetermined)
+    return flat_coords
+
+
+def get_undetermined(wavefunction):
+    # bool mask for tiles if we still need to figure out what the content is.
+    undetermined = [
+        [len(subsublist) != 1 for subsublist in sublist] for sublist in wavefunction
+    ]
+    return undetermined
+
+
+def get_coordinates_of_undetermined(wavefunction, undetermined):
+    # Coordinates we still need to figure out.
+    coords = [
+        [(j, i) for i, subsublist in enumerate(sublist) if undetermined[j][i]]
+        for j, sublist in enumerate(wavefunction)
+    ]
+    return coords
