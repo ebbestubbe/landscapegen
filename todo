@@ -23,7 +23,8 @@ ongiong:
     ☐ Figure out what the hell is going on in render_cell code. especially removing old widtgets.
     ☐ Figure otu what to do when in state that cant be fixed.
     ☐ Show number of tiles that something can be instead
-    ☐ Order the tiles in "choice mode"
+    ✔ Order the tiles in "choice mode" @done(25-12-17 22:02)
+    ☐ unify start and update drawing steps
 
 
 
