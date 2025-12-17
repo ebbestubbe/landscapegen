@@ -1,7 +1,7 @@
 from landscapegen.factory import coast_boundary_factory
 from landscapegen.factory import simple_tileset_factory
 from landscapegen.pygqt_plotting import pyqt_plot
-from landscapegen.wavefunction import generate_landscape_wfc
+from landscapegen.wavefunction import generate_collapsed_wfc
 from landscapegen.wavefunction import generate_undertermined_wavefunction
 from landscapegen.wavefunction import Wavefunction
 
@@ -12,7 +12,7 @@ def plot_example_pyqt_2():
 
     tileset = simple_tileset_factory()
 
-    wavefunction = generate_landscape_wfc(tileset=tileset, height=height, width=width)
+    wavefunction = generate_collapsed_wfc(tileset=tileset, height=height, width=width)
 
     pyqt_plot(wavefunction=wavefunction, tileset=tileset)
 

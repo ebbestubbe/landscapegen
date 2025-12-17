@@ -150,16 +150,8 @@ def collapse(point, remove_in, wavefunction, tileset, width, height):
             )
 
 
-def generate_landscape_wfc(tileset, size0=None, size1=None, height=None, width=None):
-    assert (size1 is None and height is not None) or (
-        size1 is not None and height is None
-    )  # legacy fix, use height instead of size1
-    assert (size0 is None and width is not None) or (
-        size0 is not None and width is None
-    )  # legacy fix, use width instead of size0
-
-    height = height or size1
-    width = width or size0
+def generate_collapsed_wfc(tileset, height=None, width=None):
+    # enerate a completely undetermined wavefunction and collapse random points until its collapsed
 
     wavefunction = generate_undertermined_wavefunction(
         tileset, height=height, width=width
@@ -172,9 +164,8 @@ def generate_landscape_wfc(tileset, size0=None, size1=None, height=None, width=N
         choice = random.choice(wavefunction[point[0]][point[1]])  #
         forbidden = set(wavefunction[point[0]][point[1]]) - set([choice])
 
-        # print(point, wavefunction[point[0]][point[1]], choice)
         collapse(point, forbidden, wavefunction, tileset, width, height)
-        # plot_incomplete(wavefunction=wavefunction)
+
         flat_coords = get_flat_coords_of_undetermined(wavefunction=wavefunction)
         iter = iter + 1
     return Wavefunction(wavefunction)
