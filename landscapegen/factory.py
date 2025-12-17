@@ -5,6 +5,7 @@ def coast_boundary_factory():
     G = "Grass"
     W = "Water"
     S = "Sand"
+    # Color definitions
     info = {
         G: [0, 1, 0, 1],
         W: [0, 0, 1, 1],
@@ -41,6 +42,7 @@ def simple_tileset_factory():
     S = "Sand"
     C = "Cliff"
     L = "Lava"
+    # Color definitions
     info = {
         G: [0, 1, 0, 1],
         W: [0, 0, 1, 1],

@@ -50,9 +50,14 @@ plotting:
             ✔ Collapse single cell with button click @done(25-12-13 23:07)
             ✔ Show which tiles are possible @done(25-12-13 23:07)
             ✔ Choose specific tile @done(25-12-13 23:07)
-        Add pixel tiles:
-            like a pixel tile with forest/lake/stream/road etc.
-
+    Add pixel tiles:
+        ☐ like a pixel tile with forest/lake/stream/road etc.
+    automatic collapse:
+        ☐ Button to iterate once.
+        ☐ Button to play
+        ☐ Speed selection
+        ☐ Define entropy
+        ☐ Define to choose lowest or highest entropy.
 
 Data structures:
     ☐ General cleanup

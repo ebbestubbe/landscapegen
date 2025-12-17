@@ -57,27 +57,6 @@ def collapse(point, remove_in, wavefunction, tileset, width, height):
 
     # Remove the stuff we have to remove
     wavefunction[j][i] = list(set(wavefunction[j][i]) - remove_in)
-    # debug showing landscape steps:
-    # if len(wavefunction[j][i]) == 0:
-    #     info = {
-    #         "Grass": [0, 1, 0, 1],
-    #         "Water": [0, 0, 1, 1],
-    #         "Sand": [1, 1, 0, 1],
-    #         "Void": [0, 0, 0, 1],
-    #         "impossible": [1, 0, 1, 1],
-    #     }
-    #     wavefunc2 = copy.deepcopy(wavefunction)
-    #     for jj in range(size1):
-    #         for ii in range(size0):
-    #             if len(wavefunc2) == 0:
-    #                 wavefunc2[jj][ii] = "Void"
-    #                 # print(f"{jj}, {ii} is void")
-    #             if len(wavefunc2) > 1:
-    #                 wavefunc2[jj][ii] = "impossible"
-    #                 # print(f"{jj}, {ii} is impossible")
-    #     landscape = np.array(wavefunc2)
-    #     plot_landscape(landscape=landscape, characters=info)
-    #     plt.show()
     assert len(wavefunction[j][i]) > 0
 
     # For each neighbor candidate: Dont do this if its outside the scope, and don't do it if the list of forbidden candidates is empty.
@@ -191,13 +170,6 @@ def generate_landscape_wfc(tileset, size0=None, size1=None, height=None, width=N
     while len(flat_coords) > 0:  # While we still have to figure out some coordinates.
         point = random.choice(flat_coords)  # Random point to collapse
         choice = random.choice(wavefunction[point[0]][point[1]])  #
-        # # Debug coast boundary
-        # if iter == 0:
-        #     point = (1, 0)
-        #     choice = "Sand"
-        # if iter == 1:
-        #     point = (1, 3)
-        #     choice = "Sand"
         forbidden = set(wavefunction[point[0]][point[1]]) - set([choice])
 
         # print(point, wavefunction[point[0]][point[1]], choice)
