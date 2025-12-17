@@ -2,6 +2,11 @@ import math
 import sys
 from functools import partial
 
+from PyQt6.QtGui import QBrush
+from PyQt6.QtGui import QColor
+from PyQt6.QtGui import QPainter
+from PyQt6.QtGui import QPalette
+from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtWidgets import QGridLayout
 from PyQt6.QtWidgets import QPushButton
@@ -10,7 +15,6 @@ from PyQt6.QtWidgets import QWidget
 from landscapegen.tileset import Tileset_wfc
 from landscapegen.wavefunction import collapse
 from landscapegen.wavefunction import Wavefunction
-
 
 major_pixels = 60
 
@@ -42,6 +46,9 @@ class ColorTilesApp(QWidget):
             math.sqrt(len(self.tileset.info.keys()))
         )  # nxn gridsize in smaller grid.
         minor_pixels = int(major_pixels / minor_gridsize)
+
+        self.invalid_choice_pixmap = self.checkerboard_pixmap(pixels=minor_pixels)
+
         for i in range(self.height):
             for j in range(self.width):
                 cell = self.wavefunction.wf[i][j]
@@ -87,11 +94,17 @@ class ColorTilesApp(QWidget):
                                 btn.clicked.connect(
                                     partial(self.collapse_cell, i, j, chosen)
                                 )
+                                btn.setStyleSheet(
+                                    f"background-color: rgba{tuple(rgba_color)}; border: 0px solid black;"
+                                )
                             else:
-                                rgba_color = [0, 0, 0, 1]
-                            btn.setStyleSheet(
-                                f"background-color: rgba{tuple(rgba_color)}; border: 0px solid black;"
-                            )
+                                palette = btn.palette()
+                                palette.setBrush(
+                                    QPalette.ColorRole.Button,
+                                    QBrush(self.invalid_choice_pixmap),
+                                )
+                                btn.setAutoFillBackground(True)
+                                btn.setPalette(palette)
 
                             small_layout.addWidget(btn, small_i, small_j)
                             inner_i += 1
@@ -100,6 +113,24 @@ class ColorTilesApp(QWidget):
                     self.layout.addWidget(
                         container, i, j
                     )  # Add the finished layout to the position in the cell.
+
+    def checkerboard_pixmap(self, pixels=40, tile=10):
+        # Generate the pixmap used to mark tiles taht cannot be chosen/clicked.
+        # TODO: Maybe this should be a png instead?
+        pixmap = QPixmap(pixels, pixels)
+        color_gray = QColor("#ededed")
+        color_soft_pink = QColor("#ead1dc")
+        pixmap.fill(color_gray)
+
+        painter = QPainter(pixmap)
+
+        for y in range(0, pixels, tile):
+            for x in range(0, pixels, tile):
+                if (x // tile + y // tile) % 2 == 0:
+                    painter.fillRect(x, y, tile, tile, color_soft_pink)
+
+        painter.end()
+        return pixmap
 
     def collapse_cell(self, i, j, chosen):
         print(i, j, chosen)
@@ -159,12 +190,18 @@ class ColorTilesApp(QWidget):
                         tile = cell[idx]
                         rgba = [int(c * 255) for c in self.tileset.info[tile]]
                         btn.clicked.connect(partial(self.collapse_cell, i, j, tile))
+                        btn.setStyleSheet(
+                            f"background-color: rgba{tuple(rgba)}; border: 0px;"
+                        )
                     else:
-                        rgba = [0, 0, 0, 255]
+                        palette = btn.palette()
+                        palette.setBrush(
+                            QPalette.ColorRole.Button,
+                            QBrush(self.invalid_choice_pixmap),
+                        )
+                        btn.setAutoFillBackground(True)
+                        btn.setPalette(palette)
 
-                    btn.setStyleSheet(
-                        f"background-color: rgba{tuple(rgba)}; border: 0px;"
-                    )
                     layout.addWidget(btn, x, y)
                     idx += 1
 

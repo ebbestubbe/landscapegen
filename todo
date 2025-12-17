@@ -11,18 +11,18 @@ efficiency:
     ☐ Make collapse() function return whcih cells are affected for more efficiency
     ☐ Pre-make the unfinished grid, so its more performant
     ☐ Just a pixel image instead of buttons? Probably also more performant.
+    ☐ Unclickable pixmal: should it be generated first as a png, or is the checkerboard_pixmap ok?
 
 ongiong:
     ✔ Confusion between height and width. Need extra abstraction? @done(25-12-13 19:14)
     ✔ remove old plotting code and everything that relies on it @done(25-12-14 18:30)
     ☐ landscape vs wavefunction confusion(Also 'Wavefunction' class has a 'self.wavefunction' property)
-    ☐ fix better undetermined color, like pink/white grid texture?
+    ✔ fix better undetermined color, like pink/white grid texture? @done(25-12-17 20:08)
     ☐ Border around undetermined cells, to make it easier to see which are undetermined?
     ☐ to_remove vs forbidden vs chosen in collapse() function usage.
     ☐ Figure out what the hell is going on in render_cell code. especially removing old widtgets.
     ☐ Figure otu what to do when in state that cant be fixed.
     ☐ Show number of tiles that something can be instead
-    ☐ Make button to collapse a random point of lowest entropy
     ☐ Order the tiles in "choice mode"
 
 
