@@ -43,7 +43,7 @@ class ColorTilesApp(QWidget):
         self.layout.addWidget(button)
         icon = QIcon("image.jpg")
         button.setIcon(icon)
-        button.setStyleSheet(f"background-color: black; border: 2px solid black;")
+        button.setStyleSheet("background-color: black; border: 2px solid black;")
 
         # Black mode checkbox (alternative to Ctrl for desktop app)
         self.black_mode_checkbox = QCheckBox("Black Mode (Ctrl-click also sets black)")
@@ -85,17 +85,11 @@ class ColorTilesApp(QWidget):
     def update_colors(self):
         for i, btn in enumerate(self.tiles):
             # If black mode checkbox is checked AND tile is clicked, always show black (except auto tile)
-            if (
-                self.black_mode_checkbox.isChecked()
-                and i != 3
-                and self.colors[i] != "black"
-            ):
+            if self.black_mode_checkbox.isChecked() and i != 3 and self.colors[i] != "black":
                 # If black mode active, force color to black (like Ctrl)
                 btn.setStyleSheet("background-color: black; border: 2px solid black;")
             else:
-                btn.setStyleSheet(
-                    f"background-color: {self.colors[i]}; border: 2px solid black;"
-                )
+                btn.setStyleSheet(f"background-color: {self.colors[i]}; border: 2px solid black;")
 
 
 def main():

@@ -71,7 +71,6 @@ from functools import partial
 
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtWidgets import QGridLayout
-from PyQt6.QtWidgets import QHBoxLayout
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtWidgets import QWidget
 
@@ -97,13 +96,10 @@ class ColorTilesApp(QWidget):
         self.tiles = [[] for x in range(self.height)]
 
         # Random initial colors for all.
-        self.colors = [
-            random.sample(COLOR_POOL, self.width) for _ in range(self.height)
-        ]
+        self.colors = [random.sample(COLOR_POOL, self.width) for _ in range(self.height)]
 
         for i in range(self.height):
             for j in range(self.width):
-
                 btn = QPushButton("")
                 btn.setFixedSize(100, 200)
                 color = self.colors[i][j]
@@ -120,7 +116,6 @@ class ColorTilesApp(QWidget):
                 self.layout.addWidget(btn, i, j)
 
     def handle_click(self, btn):
-
         new_color = random.choice([c for c in COLOR_POOL])
         btn.setStyleSheet(  # This is some chatgpt magic for setting the color.
             f"background-color: {new_color}; border: 0px solid black;"

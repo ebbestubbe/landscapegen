@@ -16,14 +16,13 @@ from landscapegen.tileset import Tileset_wfc
 from landscapegen.wavefunction import collapse
 from landscapegen.wavefunction import Wavefunction
 
-major_pixels = 60
-
 
 class ColorTilesApp(QWidget):
     def __init__(self, wavefunction: Wavefunction, tileset: Tileset_wfc):
-
         super().__init__()
         self.setWindowTitle("Color Tiles with Ctrl Click (PyQt6)")
+        # consts
+        self.major_pixels = 60  # Number of pixels in a major cell
         # Layout
         self.layout = QGridLayout()
         self.layout.setContentsMargins(0, 0, 0, 0)
@@ -36,14 +35,12 @@ class ColorTilesApp(QWidget):
         self.width = self.wavefunction.width
         self.height = self.wavefunction.height
 
-        self.cell_widgets = [
-            [None for _ in range(self.width)] for _ in range(self.height)
-        ]
+        self.cell_widgets = [[None for _ in range(self.width)] for _ in range(self.height)]
 
         # Calculate minor gridsize struff
         # nxn gridsize in smaller grid.
         self.minor_gridsize = math.ceil(math.sqrt(len(self.tileset.info)))
-        self.minor_pixels = int(major_pixels / self.minor_gridsize)
+        self.minor_pixels = int(self.major_pixels / self.minor_gridsize)
 
         # More difficult calculations
         self.invalid_choice_pixmap = self.checkerboard_pixmap(pixels=self.minor_pixels)
@@ -55,14 +52,10 @@ class ColorTilesApp(QWidget):
                 if len(cell) == 1:
                     # This cell is already determined, just plot it, with no button action.
                     btn = QPushButton()
-                    btn.setFixedSize(major_pixels, major_pixels)
-                    rgba_color = [
-                        int(part * 255) for part in self.tileset.info[cell[0]]
-                    ]
+                    btn.setFixedSize(self.major_pixels, self.major_pixels)
+                    rgba_color = [int(part * 255) for part in self.tileset.info[cell[0]]]
 
-                    btn.setStyleSheet(
-                        f"background-color: rgba{tuple(rgba_color)}; border: 0px solid black;"
-                    )
+                    btn.setStyleSheet(f"background-color: rgba{tuple(rgba_color)}; border: 0px solid black;")
 
                     self.cell_widgets[i][j] = btn
                     self.layout.addWidget(btn, i, j)
@@ -72,37 +65,21 @@ class ColorTilesApp(QWidget):
                     container = QWidget()
                     small_layout = QGridLayout(container)  # Make a smaller layout here.
                     small_layout.setSpacing(0)
-
                     small_layout.setContentsMargins(0, 0, 0, 0)
-                    container.setFixedSize(major_pixels, major_pixels)
+                    container.setFixedSize(self.major_pixels, self.major_pixels)
 
                     # TODO: save computation here by making the print once(all black) and removing/adding what is needed.
                     for small_i in range(self.minor_gridsize):
                         for small_j in range(self.minor_gridsize):
-
                             btn = QPushButton()
                             btn.setFixedSize(self.minor_pixels, self.minor_pixels)
-                            if (
-                                small_i,
-                                small_j,
-                            ) in self.dict_reserved and self.dict_reserved[
-                                (small_i, small_j)
-                            ] in cell:
-
+                            if (small_i, small_j) in self.dict_reserved and self.dict_reserved[(small_i, small_j)] in cell:
                                 chosen = self.dict_reserved[(small_i, small_j)]
-                                print(small_i, small_j, "reserved for ", chosen)
-                                rgba_color = [
-                                    int(part * 255)
-                                    for part in self.tileset.info[chosen]
-                                ]
+                                rgba_color = [int(part * 255) for part in self.tileset.info[chosen]]
                                 # Chosen thing in cell [i,j]
-                                btn.clicked.connect(
-                                    partial(self.collapse_cell, i, j, chosen)
-                                )
-                                btn.setStyleSheet(
-                                    f"background-color: rgba{tuple(rgba_color)}; border: 0px solid black;"
-                                )
-                            else:
+                                btn.clicked.connect(partial(self.collapse_cell, i, j, chosen))
+                                btn.setStyleSheet(f"background-color: rgba{tuple(rgba_color)}; border: 0px solid black;")
+                            else:  # This cell is either not reserved for a specific tile, or the specific tile is not possible any more.
                                 palette = btn.palette()
                                 palette.setBrush(
                                     QPalette.ColorRole.Button,
@@ -114,9 +91,7 @@ class ColorTilesApp(QWidget):
                             small_layout.addWidget(btn, small_i, small_j)
 
                     self.cell_widgets[i][j] = container
-                    self.layout.addWidget(
-                        container, i, j
-                    )  # Add the finished layout to the position in the cell.
+                    self.layout.addWidget(container, i, j)  # Add the finished layout to the position in the cell.
 
     def make_dict_reserved(self, tileset, minor_gridsize):
         dict_reserved = {}
@@ -165,7 +140,7 @@ class ColorTilesApp(QWidget):
         for i in range(self.height):
             for j in range(self.width):
                 affected.append([i, j])
-        for (x, y) in affected:
+        for x, y in affected:
             self.render_cell(x, y)
 
     def render_cell(self, i, j):
@@ -178,8 +153,9 @@ class ColorTilesApp(QWidget):
             old.deleteLater()
 
         if len(cell) == 1:
+            # This cell is already determined, just plot it, with no button action.
             btn = QPushButton()
-            btn.setFixedSize(major_pixels, major_pixels)
+            btn.setFixedSize(self.major_pixels, self.major_pixels)
             rgba = [int(c * 255) for c in self.tileset.info[cell[0]]]
             btn.setStyleSheet(f"background-color: rgba{tuple(rgba)}; border: 0px;")
             widget = btn
@@ -188,7 +164,7 @@ class ColorTilesApp(QWidget):
             layout = QGridLayout(widget)
             layout.setSpacing(0)
             layout.setContentsMargins(0, 0, 0, 0)
-            widget.setFixedSize(major_pixels, major_pixels)
+            widget.setFixedSize(self.major_pixels, self.major_pixels)
 
             idx = 0
             for x in range(self.minor_gridsize):
@@ -196,16 +172,11 @@ class ColorTilesApp(QWidget):
                     btn = QPushButton()
                     btn.setFixedSize(self.minor_pixels, self.minor_pixels)
 
-                    if (x, y) in self.dict_reserved and self.dict_reserved[
-                        (x, y)
-                    ] in cell:
+                    if (x, y) in self.dict_reserved and self.dict_reserved[(x, y)] in cell:
                         tile = self.dict_reserved[(x, y)]
-                        print(x, y, "reserved for ", tile)
                         rgba = [int(c * 255) for c in self.tileset.info[tile]]
                         btn.clicked.connect(partial(self.collapse_cell, i, j, tile))
-                        btn.setStyleSheet(
-                            f"background-color: rgba{tuple(rgba)}; border: 0px;"
-                        )
+                        btn.setStyleSheet(f"background-color: rgba{tuple(rgba)}; border: 0px;")
                     else:
                         palette = btn.palette()
                         palette.setBrush(
