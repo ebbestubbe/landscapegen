@@ -3,6 +3,7 @@ import random
 import sys
 from functools import partial
 
+from PyQt6.QtCore import QTimer
 from PyQt6.QtGui import QBrush
 from PyQt6.QtGui import QColor
 from PyQt6.QtGui import QPainter
@@ -41,9 +42,25 @@ class ColorTilesApp(QWidget):
 
         # Layout(buttons)
         self.layout_panel = QVBoxLayout()
+        # Collapse once
         btn_collapse = QPushButton("Collapse!")
         btn_collapse.clicked.connect(partial(self.collapse_cell_random))
         self.layout_panel.addWidget(btn_collapse)
+
+        # Play timer
+        self.timer = QTimer()
+        self.timer.setInterval(300)  # in milliseconds
+        self.timer.timeout.connect(self.collapse_cell_random)
+        # Play
+        btn_play = QPushButton("Play!")
+        btn_play.clicked.connect(partial(self.collapse_cell_play))
+        self.layout_panel.addWidget(btn_play)
+
+        # Pause
+        btn_pause = QPushButton("Pause!")
+        btn_pause.clicked.connect(partial(self.collapse_cell_pause))
+        self.layout_panel.addWidget(btn_pause)
+
         # Layout(wfc)
         self.layout_wfc = QGridLayout()
         self.layout_wfc.setContentsMargins(0, 0, 0, 0)
@@ -59,7 +76,7 @@ class ColorTilesApp(QWidget):
         self.tileset = tileset
         self.width = self.wavefunction.width
         self.height = self.wavefunction.height
-
+        self.play = False
         self.cell_widgets = [[None for _ in range(self.width)] for _ in range(self.height)]
 
         # Calculate minor gridsize struff
@@ -155,6 +172,8 @@ class ColorTilesApp(QWidget):
         flat_coords = get_flat_coords_of_undetermined(wavefunction=wf)
         if len(flat_coords) == 0:
             print("nothing more to collapse!")
+            self.play = False
+            self.timer.stop()
             return
         point = random.choice(flat_coords)  # Random point to collapse
         choice = random.choice(wf[point[0]][point[1]])  #
@@ -177,6 +196,14 @@ class ColorTilesApp(QWidget):
                 affected.append([i, j])
         for x, y in affected:
             self.render_cell(x, y)
+
+    def collapse_cell_play(self):
+        self.play = True
+        self.timer.start()
+
+    def collapse_cell_pause(self):
+        self.play = False
+        self.timer.stop()
 
     def render_cell(self, i: int, j: int):
         """Renders the cell. This should be called after there is a change to a cell.
