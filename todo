@@ -30,6 +30,7 @@ ongiong:
     ✔ Order the tiles in "choice mode" @done(25-12-17 22:02)
     ☐ unify start and update drawing steps
     ☐ Større sandsynligheder for at få tile X hvis den er ved siden af flere X
+    ☐ Figure out what partial() functools does
 
 
 

@@ -44,29 +44,26 @@ class ColorTilesApp(QWidget):
 
         # More difficult calculations
         self.invalid_choice_pixmap = self.checkerboard_pixmap(pixels=self.minor_pixels)
-        self.dict_reserved = self.make_dict_reserved(tileset, self.minor_gridsize)
+        self.dict_reserved = self.make_dict_reserved()
 
         for i in range(self.height):
             for j in range(self.width):
                 cell = self.wavefunction.wf[i][j]
                 if len(cell) == 1:
                     # This cell is already determined, just plot it, with no button action.
-                    btn = QPushButton()
-                    btn.setFixedSize(self.major_pixels, self.major_pixels)
+                    widget = QPushButton()
+                    widget.setFixedSize(self.major_pixels, self.major_pixels)
                     rgba_color = [int(part * 255) for part in self.tileset.info[cell[0]]]
 
-                    btn.setStyleSheet(f"background-color: rgba{tuple(rgba_color)}; border: 0px solid black;")
-
-                    self.cell_widgets[i][j] = btn
-                    self.layout.addWidget(btn, i, j)
+                    widget.setStyleSheet(f"background-color: rgba{tuple(rgba_color)}; border: 0px solid black;")
 
                 else:
                     # This cell is not determined! We need to plot all possibilities.
-                    container = QWidget()
-                    small_layout = QGridLayout(container)  # Make a smaller layout here.
+                    widget = QWidget()  # Add the container widget
+                    small_layout = QGridLayout(widget)  # Make a smaller layout here.
                     small_layout.setSpacing(0)
                     small_layout.setContentsMargins(0, 0, 0, 0)
-                    container.setFixedSize(self.major_pixels, self.major_pixels)
+                    widget.setFixedSize(self.major_pixels, self.major_pixels)
 
                     # TODO: save computation here by making the print once(all black) and removing/adding what is needed.
                     for small_i in range(self.minor_gridsize):
@@ -77,7 +74,9 @@ class ColorTilesApp(QWidget):
                                 chosen = self.dict_reserved[(small_i, small_j)]
                                 rgba_color = [int(part * 255) for part in self.tileset.info[chosen]]
                                 # Chosen thing in cell [i,j]
-                                btn.clicked.connect(partial(self.collapse_cell, i, j, chosen))
+                                btn.clicked.connect(
+                                    partial(self.collapse_cell, i, j, chosen)
+                                )  # Partial is some magic to connect the button to a function and add arguments
                                 btn.setStyleSheet(f"background-color: rgba{tuple(rgba_color)}; border: 0px solid black;")
                             else:  # This cell is either not reserved for a specific tile, or the specific tile is not possible any more.
                                 palette = btn.palette()
@@ -90,21 +89,23 @@ class ColorTilesApp(QWidget):
 
                             small_layout.addWidget(btn, small_i, small_j)
 
-                    self.cell_widgets[i][j] = container
-                    self.layout.addWidget(container, i, j)  # Add the finished layout to the position in the cell.
+                self.cell_widgets[i][j] = widget
+                self.layout.addWidget(widget, i, j)
 
-    def make_dict_reserved(self, tileset, minor_gridsize):
+    def make_dict_reserved(self):
+        # Figure out whcih tile should be reserved in which coordinates (i,j).
         dict_reserved = {}
-        for t, tile in enumerate(tileset.info):
-            j_coord = t % minor_gridsize
-            i_coord = math.floor(t / minor_gridsize)
+        for t, tile in enumerate(self.tileset.info):  # for each tile type.
+            j_coord = t % self.minor_gridsize  # get height coord
+            i_coord = math.floor(t / self.minor_gridsize)  # get width coord.
             dict_reserved[(i_coord, j_coord)] = tile
 
         return dict_reserved
 
-    def checkerboard_pixmap(self, pixels=40, tile=10):
+    def checkerboard_pixmap(self, pixels, tile=None):
         # Generate the pixmap used to mark tiles taht cannot be chosen/clicked.
         # TODO: Maybe this should be a png instead?
+        tile = tile if tile else int(pixels / 4)
         pixmap = QPixmap(pixels, pixels)
         color_gray = QColor("#ededed")
         color_soft_pink = QColor("#ead1dc")
