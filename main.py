@@ -7,8 +7,8 @@ from landscapegen.wavefunction import Wavefunction
 
 
 def plot_example_pyqt_2():
-    height = 10
-    width = 15
+    height = 60
+    width = 80
 
     tileset = simple_tileset_factory()
 
@@ -41,9 +41,9 @@ def plot_completely_undetermined_simple():
 
 def main():
 
-    # plot_example_pyqt_2()
+    plot_example_pyqt_2()
     # plot_completely_undetermined_coast()
-    plot_completely_undetermined_simple()
+    # plot_completely_undetermined_simple()
 
 
 if __name__ == "__main__":

@@ -12,6 +12,7 @@ efficiency:
     ☐ Pre-make the unfinished grid, so its more performant
     ☐ Just a pixel image instead of buttons? Probably also more performant.
     ☐ Unclickable pixmal: should it be generated first as a png, or is the checkerboard_pixmap ok?
+    ☐ Time generation of 10x10, 30x30, 60x60 etc for performance test.
 
 ongiong:
     ✔ Confusion between height and width. Need extra abstraction? @done(25-12-13 19:14)
@@ -21,10 +22,14 @@ ongiong:
     ☐ Border around undetermined cells, to make it easier to see which are undetermined?
     ☐ to_remove vs forbidden vs chosen in collapse() function usage.
     ☐ Figure out what the hell is going on in render_cell code. especially removing old widtgets.
+    ☐ Merge initial and collapse_cell code
     ☐ Figure otu what to do when in state that cant be fixed.
     ☐ Show number of tiles that something can be instead
+    ☐ Show average color of possibility of tiles
+    ☐ Prettier tiles
     ✔ Order the tiles in "choice mode" @done(25-12-17 22:02)
     ☐ unify start and update drawing steps
+    ☐ Større sandsynligheder for at få tile X hvis den er ved siden af flere X
 
 
 
