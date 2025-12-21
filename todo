@@ -13,6 +13,7 @@ efficiency:
     ☐ Just a pixel image instead of buttons? Probably also more performant.
     ☐ Unclickable pixmal: should it be generated first as a png, or is the checkerboard_pixmap ok?
     ☐ Time generation of 10x10, 30x30, 60x60 etc for performance test.
+    ☐ The function to render cells takes in a list of cells to rerender. But all cells are added to this dict. Optimize by only adding those with new
 
 ongiong:
     ✔ Confusion between height and width. Need extra abstraction? @done(25-12-13 19:14)
