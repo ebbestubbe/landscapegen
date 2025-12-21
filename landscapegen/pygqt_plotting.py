@@ -1,4 +1,5 @@
 import math
+import random
 import sys
 from functools import partial
 
@@ -10,10 +11,12 @@ from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtWidgets import QGridLayout
 from PyQt6.QtWidgets import QPushButton
+from PyQt6.QtWidgets import QVBoxLayout
 from PyQt6.QtWidgets import QWidget
 
 from landscapegen.tileset import Tileset_wfc
 from landscapegen.wavefunction import collapse
+from landscapegen.wavefunction import get_flat_coords_of_undetermined
 from landscapegen.wavefunction import Wavefunction
 
 
@@ -30,11 +33,26 @@ class ColorTilesApp(QWidget):
         self.setWindowTitle("Color Tiles with Ctrl Click (PyQt6)")
         # consts
         self.major_pixels = 60  # Number of pixels in a major cell
-        # Layout
-        self.layout = QGridLayout()
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setSpacing(0)
-        self.setLayout(self.layout)
+
+        # Layout(main)
+        self.layout_main = QVBoxLayout()
+        # self.main_layout.setSpacing(0)
+        # self.main_layout.setContentsMargins(0, 0, 0, 0)
+
+        # Layout(buttons)
+        self.layout_panel = QVBoxLayout()
+        btn_collapse = QPushButton("Collapse!")
+        btn_collapse.clicked.connect(partial(self.collapse_cell_random))
+        self.layout_panel.addWidget(btn_collapse)
+        # Layout(wfc)
+        self.layout_wfc = QGridLayout()
+        self.layout_wfc.setContentsMargins(0, 0, 0, 0)
+        self.layout_wfc.setSpacing(0)
+
+        # Layout()
+        self.layout_main.addLayout(self.layout_panel)
+        self.layout_main.addLayout(self.layout_wfc)
+        self.setLayout(self.layout_main)
 
         # Tiles buttons
         self.wavefunction = wavefunction
@@ -91,7 +109,7 @@ class ColorTilesApp(QWidget):
                             small_layout.addWidget(btn, small_i, small_j)
 
                 self.cell_widgets[i][j] = widget
-                self.layout.addWidget(widget, i, j)
+                self.layout_wfc.addWidget(widget, i, j)
 
     def collapse_cell(self, i: int, j: int, chosen: str):
         """Collapse a cell with the given choice.
@@ -124,6 +142,42 @@ class ColorTilesApp(QWidget):
         for x, y in affected:
             self.render_cell(x, y)
 
+    def collapse_cell_random(self):
+        """Collapse a cell with the given choice.
+
+        Args:
+            i (int): "height" from top of canvas
+            j (int): "width" from left of canvas
+            chosen (str): The chosen tile for this cell.
+        """
+
+        wf = self.wavefunction.wf
+        flat_coords = get_flat_coords_of_undetermined(wavefunction=wf)
+        if len(flat_coords) == 0:
+            print("nothing more to collapse!")
+            return
+        point = random.choice(flat_coords)  # Random point to collapse
+        choice = random.choice(wf[point[0]][point[1]])  #
+        forbidden = set(wf[point[0]][point[1]]) - set([choice])
+
+        collapse(
+            point=point,
+            remove_in=forbidden,
+            wavefunction=wf,
+            tileset=self.tileset,
+            width=self.width,
+            height=self.height,
+        )
+        self.wavefunction = Wavefunction(wf)
+
+        # Find out which cells are affected and re-render these.
+        affected = []
+        for i in range(self.height):
+            for j in range(self.width):
+                affected.append([i, j])
+        for x, y in affected:
+            self.render_cell(x, y)
+
     def render_cell(self, i: int, j: int):
         """Renders the cell. This should be called after there is a change to a cell.
 
@@ -136,7 +190,7 @@ class ColorTilesApp(QWidget):
         # Remove old widget
         old = self.cell_widgets[i][j]
         if old:
-            self.layout.removeWidget(old)
+            self.layout_wfc.removeWidget(old)
             old.deleteLater()
 
         if len(cell) == 1:
@@ -171,7 +225,7 @@ class ColorTilesApp(QWidget):
                     idx += 1
 
         self.cell_widgets[i][j] = widget
-        self.layout.addWidget(widget, i, j)
+        self.layout_wfc.addWidget(widget, i, j)
 
     def make_dict_reserved(self) -> dict[tuple[int, int], str]:
         """Figure out which tile should be reserved in which coordinates (i,j).

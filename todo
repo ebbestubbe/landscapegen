@@ -61,7 +61,7 @@ plotting:
     Add pixel tiles:
         ☐ like a pixel tile with forest/lake/stream/road etc.
     automatic collapse:
-        ☐ Button to iterate once.
+        ✔ Button to iterate once. @done(25-12-22 00:38)
         ☐ Button to play
         ☐ Speed selection
         ☐ Define entropy
