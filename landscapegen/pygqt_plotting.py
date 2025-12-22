@@ -44,16 +44,16 @@ class ColorTilesApp(QWidget):
         self.layout_panel = QVBoxLayout()
         # Collapse once
         btn_collapse = QPushButton("Collapse!")
-        btn_collapse.clicked.connect(partial(self.collapse_cell_random))
+        btn_collapse.clicked.connect(partial(self.collapse_cell, i=None, j=None, chosen=None))
         self.layout_panel.addWidget(btn_collapse)
 
         # Play timer
         self.timer = QTimer()
         self.timer.setInterval(300)  # in milliseconds
-        self.timer.timeout.connect(self.collapse_cell_random)
+        self.timer.timeout.connect(self.collapse_cell)
         # Play
         btn_play = QPushButton("Play!")
-        btn_play.clicked.connect(partial(self.collapse_cell_play))
+        btn_play.clicked.connect(self.collapse_cell_play)
         self.layout_panel.addWidget(btn_play)
 
         # Pause
@@ -128,7 +128,7 @@ class ColorTilesApp(QWidget):
                 self.cell_widgets[i][j] = widget
                 self.layout_wfc.addWidget(widget, i, j)
 
-    def collapse_cell(self, i: int, j: int, chosen: str):
+    def collapse_cell(self, i: int = None, j: int = None, chosen: str = None):
         """Collapse a cell with the given choice.
 
         Args:
@@ -136,48 +136,21 @@ class ColorTilesApp(QWidget):
             j (int): "width" from left of canvas
             chosen (str): The chosen tile for this cell.
         """
-        print(i, j, chosen)
-        point = (i, j)
         wf = self.wavefunction.wf
-        remove_in = set(wf[i][j]) - set([chosen])
-
-        collapse(
-            point=point,
-            remove_in=remove_in,
-            wavefunction=wf,
-            tileset=self.tileset,
-            width=self.width,
-            height=self.height,
-        )
-        self.wavefunction = Wavefunction(wf)
-
-        # Find out which cells are affected and re-render these.
-        affected = []
-        for i in range(self.height):
-            for j in range(self.width):
-                affected.append([i, j])
-        for x, y in affected:
-            self.render_cell(x, y)
-
-    def collapse_cell_random(self):
-        """Collapse a cell with the given choice.
-
-        Args:
-            i (int): "height" from top of canvas
-            j (int): "width" from left of canvas
-            chosen (str): The chosen tile for this cell.
-        """
-
-        wf = self.wavefunction.wf
-        flat_coords = get_flat_coords_of_undetermined(wavefunction=wf)
-        if len(flat_coords) == 0:
-            print("nothing more to collapse!")
-            self.play = False
-            self.timer.stop()
-            return
-        point = random.choice(flat_coords)  # Random point to collapse
-        choice = random.choice(wf[point[0]][point[1]])  #
-        forbidden = set(wf[point[0]][point[1]]) - set([choice])
+        if i is None and j is None and chosen is None:  # No selection -> must be random
+            flat_coords = get_flat_coords_of_undetermined(wavefunction=wf)
+            if len(flat_coords) == 0:  # If the timer is going and there is no more to choose, stop the timer.
+                print("nothing more to collapse!")
+                self.play = False
+                self.timer.stop()
+                return
+            point = random.choice(flat_coords)  # Random point to collapse
+            chosen = random.choice(wf[point[0]][point[1]])  #
+            # forbidden = set(wf[point[0]][point[1]]) - set([chosen])
+        else:
+            print(i, j, chosen)
+            point = (i, j)
+        forbidden = set(wf[point[0]][point[1]]) - set([chosen])
 
         collapse(
             point=point,

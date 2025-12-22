@@ -62,7 +62,7 @@ plotting:
         ☐ like a pixel tile with forest/lake/stream/road etc.
     automatic collapse:
         ✔ Button to iterate once. @done(25-12-22 00:38)
-        ☐ Button to play
+        ✔ Button to play @done(25-12-22 00:53)
         ☐ Speed selection
         ☐ Define entropy
         ☐ Define to choose lowest or highest entropy.
