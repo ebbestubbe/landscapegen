@@ -40,14 +40,17 @@ class Wavefunction:
                     return False
         return True
 
-    @property
-    def contains_blank(self):
-        for i, row in enumerate(self.wf):
-            for j, col in enumerate(row):
-                if col[0] == "__BLANK__":
-                    return True
+    def save(self, filename):
+        assert self.collapsed
 
-        return False
+        wf_text_rows = []
+        for i, row in enumerate(self.wf):
+            row_text = [t[0] for t in row]  # Unpack a single row
+            wf_text_rows.append(row_text)
+        with open(filename, "w") as file:
+            for row in wf_text_rows:
+                row_text = ",".join(row) + "\n"
+                file.writelines(row_text)
 
 
 def collapse(point, remove_in, wavefunction, tileset, width, height):
@@ -68,11 +71,7 @@ def collapse(point, remove_in, wavefunction, tileset, width, height):
     # Top
     if j_top >= 0:  # Don't go out of scope
         coords_top = (j_top, i)
-        allowed_top = set(
-            flatten_list_of_lists(
-                [tileset.connections[tile]["top"] for tile in wavefunction[j][i]]
-            )
-        )
+        allowed_top = set(flatten_list_of_lists([tileset.connections[tile]["top"] for tile in wavefunction[j][i]]))
         forbidden_top = character_set - allowed_top
         to_remove_top = set(wavefunction[j_top][i]).intersection(forbidden_top)
         if len(to_remove_top) > 0:
@@ -89,11 +88,7 @@ def collapse(point, remove_in, wavefunction, tileset, width, height):
     # Right
     if i_right < width:  # Don't go out of scope
         coords_right = (j, i_right)
-        allowed_right = set(
-            flatten_list_of_lists(
-                [tileset.connections[tile]["right"] for tile in wavefunction[j][i]]
-            )
-        )
+        allowed_right = set(flatten_list_of_lists([tileset.connections[tile]["right"] for tile in wavefunction[j][i]]))
         forbidden_right = character_set - allowed_right
         to_remove_right = set(wavefunction[j][i_right]).intersection(forbidden_right)
         if len(to_remove_right) > 0:
@@ -110,11 +105,7 @@ def collapse(point, remove_in, wavefunction, tileset, width, height):
     # Bottom
     if j_bottom < height:  # Don't go out of scope
         cords_bottom = (j_bottom, i)
-        allowed_bottom = set(
-            flatten_list_of_lists(
-                [tileset.connections[tile]["bottom"] for tile in wavefunction[j][i]]
-            )
-        )
+        allowed_bottom = set(flatten_list_of_lists([tileset.connections[tile]["bottom"] for tile in wavefunction[j][i]]))
         forbidden_bottom = character_set - allowed_bottom
         to_remove_bottom = set(wavefunction[j_bottom][i]).intersection(forbidden_bottom)
         if len(to_remove_bottom) > 0:
@@ -131,11 +122,7 @@ def collapse(point, remove_in, wavefunction, tileset, width, height):
     # Left # Don't go out of scope
     if i_left >= 0:
         cords_left = (j, i_left)
-        allowed_left = set(
-            flatten_list_of_lists(
-                [tileset.connections[tile]["left"] for tile in wavefunction[j][i]]
-            )
-        )
+        allowed_left = set(flatten_list_of_lists([tileset.connections[tile]["left"] for tile in wavefunction[j][i]]))
         forbidden_left = character_set - allowed_left
         to_remove_left = set(wavefunction[j][i_left]).intersection(forbidden_left)
         if len(to_remove_left) > 0:
@@ -153,9 +140,7 @@ def collapse(point, remove_in, wavefunction, tileset, width, height):
 def generate_collapsed_wfc(tileset, height=None, width=None):
     # enerate a completely undetermined wavefunction and collapse random points until its collapsed
 
-    wavefunction = generate_undertermined_wavefunction(
-        tileset, height=height, width=width
-    )
+    wavefunction = generate_undertermined_wavefunction(tileset, height=height, width=width)
 
     flat_coords = get_flat_coords_of_undetermined(wavefunction=wavefunction)
     iter = 0
@@ -172,34 +157,24 @@ def generate_collapsed_wfc(tileset, height=None, width=None):
 
 
 def generate_undertermined_wavefunction(tileset, height, width):
-
-    wavefunction = [
-        [tileset.characters for _1 in range(width)] for _0 in range(height)
-    ]  # Array of all the possible tiles at this point
+    wavefunction = [[tileset.characters for _1 in range(width)] for _0 in range(height)]  # Array of all the possible tiles at this point
     return wavefunction
 
 
 def get_flat_coords_of_undetermined(wavefunction):
     undetermined = get_undetermined(wavefunction=wavefunction)
-    coords_of_undetermined = get_coordinates_of_undetermined(
-        wavefunction=wavefunction, undetermined=undetermined
-    )
+    coords_of_undetermined = get_coordinates_of_undetermined(wavefunction=wavefunction, undetermined=undetermined)
     flat_coords = flatten_list_of_lists(list_of_lists=coords_of_undetermined)
     return flat_coords
 
 
 def get_undetermined(wavefunction):
     # bool mask for tiles if we still need to figure out what the content is.
-    undetermined = [
-        [len(subsublist) != 1 for subsublist in sublist] for sublist in wavefunction
-    ]
+    undetermined = [[len(subsublist) != 1 for subsublist in sublist] for sublist in wavefunction]
     return undetermined
 
 
 def get_coordinates_of_undetermined(wavefunction, undetermined):
     # Coordinates we still need to figure out.
-    coords = [
-        [(j, i) for i, subsublist in enumerate(sublist) if undetermined[j][i]]
-        for j, sublist in enumerate(wavefunction)
-    ]
+    coords = [[(j, i) for i, subsublist in enumerate(sublist) if undetermined[j][i]] for j, sublist in enumerate(wavefunction)]
     return coords

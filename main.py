@@ -35,10 +35,21 @@ def plot_completely_undetermined_simple():
     pyqt_plot(wavefunction=wavefunction, tileset=tileset)
 
 
+def save_wf():
+    height = 4
+    width = 6
+
+    tileset = simple_tileset_factory()
+
+    wavefunction = generate_collapsed_wfc(tileset=tileset, height=height, width=width)
+    wavefunction.save("wf.text")
+
+
 def main():
     # plot_example_pyqt_2()
     # plot_completely_undetermined_coast()
-    plot_completely_undetermined_simple()
+    # plot_completely_undetermined_simple()
+    save_wf()
 
 
 if __name__ == "__main__":
