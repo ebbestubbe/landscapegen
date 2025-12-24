@@ -51,15 +51,21 @@ class ColorTilesApp(QWidget):
         self.timer = QTimer()
         self.timer.setInterval(300)  # in milliseconds
         self.timer.timeout.connect(self.collapse_cell)
+
         # Play
         btn_play = QPushButton("Play!")
-        btn_play.clicked.connect(self.collapse_cell_play)
+        btn_play.clicked.connect(self.btn_func_play)
         self.layout_panel.addWidget(btn_play)
 
         # Pause
         btn_pause = QPushButton("Pause!")
-        btn_pause.clicked.connect(partial(self.collapse_cell_pause))
+        btn_pause.clicked.connect(partial(self.btn_func_pause))
         self.layout_panel.addWidget(btn_pause)
+
+        # save
+        btn_save = QPushButton("Save")
+        btn_save.clicked.connect(self.btn_func_save)
+        self.layout_panel.addWidget(btn_save)
 
         # Layout(wfc)
         self.layout_wfc = QGridLayout()
@@ -170,13 +176,16 @@ class ColorTilesApp(QWidget):
         for x, y in affected:
             self.render_cell(x, y)
 
-    def collapse_cell_play(self):
+    def btn_func_play(self):
         self.play = True
         self.timer.start()
 
-    def collapse_cell_pause(self):
+    def btn_func_pause(self):
         self.play = False
         self.timer.stop()
+
+    def btn_func_save(self):
+        self.wavefunction.save("wf.txt")
 
     def render_cell(self, i: int, j: int):
         """Renders the cell. This should be called after there is a change to a cell.

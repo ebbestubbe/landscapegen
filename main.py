@@ -42,14 +42,14 @@ def save_wf():
     tileset = simple_tileset_factory()
 
     wavefunction = generate_collapsed_wfc(tileset=tileset, height=height, width=width)
-    wavefunction.save("wf.text")
+    wavefunction.save("wf.txt")
 
 
 def main():
     # plot_example_pyqt_2()
     # plot_completely_undetermined_coast()
-    # plot_completely_undetermined_simple()
-    save_wf()
+    plot_completely_undetermined_simple()
+    # save_wf()
 
 
 if __name__ == "__main__":

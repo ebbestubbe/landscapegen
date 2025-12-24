@@ -1,0 +1,7 @@
+Lava,Cliff,Grass,Cliff,Grass,Sand,Grass,Cliff,Grass,Sand
+Cliff,Cliff,Cliff,Grass,Grass,Sand,Sand,Grass,Sand,Grass
+Lava,Cliff,Grass,Sand,Grass,Sand,Water,Sand,Grass,Cliff
+Cliff,Grass,Sand,Water,Sand,Grass,Sand,Grass,Cliff,Grass
+Lava,Cliff,Grass,Sand,Grass,Grass,Sand,Grass,Cliff,Grass
+Cliff,Grass,Sand,Grass,Cliff,Cliff,Grass,Cliff,Grass,Grass
+Lava,Cliff,Grass,Cliff,Lava,Cliff,Grass,Grass,Cliff,Cliff
