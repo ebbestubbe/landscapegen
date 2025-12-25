@@ -1,6 +1,9 @@
+from pathlib import Path
+
 from landscapegen.factory import coast_boundary_factory
 from landscapegen.factory import simple_tileset_factory
 from landscapegen.pygqt_plotting import pyqt_plot
+from landscapegen.tileset import tileset_from_save
 from landscapegen.wavefunction import generate_collapsed_wfc
 from landscapegen.wavefunction import generate_undertermined_wavefunction
 from landscapegen.wavefunction import Wavefunction
@@ -27,8 +30,8 @@ def plot_completely_undetermined_coast():
 
 
 def plot_completely_undetermined_simple():
-    height = 7
-    width = 10
+    height = 3
+    width = 3
     tileset = simple_tileset_factory()
     wavefunction = generate_undertermined_wavefunction(tileset=tileset, height=height, width=width)
     wavefunction = Wavefunction(wavefunction)
@@ -45,11 +48,20 @@ def save_wf():
     wavefunction.save("wf.txt")
 
 
+def load_wf():
+    path = Path("wf.txt")
+    tileset = tileset_from_save(path)
+    height = 7
+    width = 10
+
+
 def main():
     # plot_example_pyqt_2()
     # plot_completely_undetermined_coast()
     plot_completely_undetermined_simple()
     # save_wf()
+    # load_wf()
+    # use_loaded()
 
 
 if __name__ == "__main__":

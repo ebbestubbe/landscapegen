@@ -13,6 +13,7 @@ class Wavefunction:
         #     [["Sand"], ["Water"]],
         #     [["Sand"], ["Sand", "Grass"]],
         # ]
+        assert isinstance(wf[0][0], list)  # each cell must be a list of lists
         self.wf = wf
         self.size0 = len(wf[0])
         self.size1 = len(wf)

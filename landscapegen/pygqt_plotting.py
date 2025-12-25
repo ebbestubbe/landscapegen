@@ -72,7 +72,7 @@ class ColorTilesApp(QWidget):
         self.layout_wfc.setContentsMargins(0, 0, 0, 0)
         self.layout_wfc.setSpacing(0)
 
-        # Layout()
+        # Layout(main)
         self.layout_main.addLayout(self.layout_panel)
         self.layout_main.addLayout(self.layout_wfc)
         self.setLayout(self.layout_main)
