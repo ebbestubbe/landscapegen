@@ -35,6 +35,7 @@ probabilities:
     ☐ Show average color of possibility of tiles
     ☐ Count tiles and neighbors from existing pixelmap.
     ☐ save tile info as well.
+    ✔ load rules from pixelmap @done(25-12-25 23:04)
     ✔ save pixelmap @done(25-12-24 10:58)
 
 

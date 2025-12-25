@@ -44,7 +44,7 @@ def get_bidirectional_neighbor_set(path):
     # Count all pairs
     with open(path) as f:
         lines = f.readlines()
-    list_of_lists = [l.strip("\n").split(",") for l in lines]
+    list_of_lists = [line.strip("\n").split(",") for line in lines]
     height = len(list_of_lists)
     width = len(list_of_lists[0])
 
@@ -65,13 +65,13 @@ def tileset_from_save(path: Path):
         lines = f.readlines()
 
     # Make a collapsed wf:
-    wf = [[[s] for s in l.strip("\n").split(",")] for l in lines]
+    wf = [[[tile] for tile in line.strip("\n").split(",")] for line in lines]
     wavefunction = Wavefunction(wf)
     print("=" * 50 + "wf" + "=" * 50)
     print(wavefunction.wf)
     print("=" * 50 + "wf[0]" + "=" * 50)
     print(wavefunction.wf[0])
-    list_of_lists = [l.strip("\n").split(",") for l in lines]
+    list_of_lists = [line.strip("\n").split(",") for line in lines]
     print("=" * 50 + "list of lists" + "=" * 50)
     print(list_of_lists)
     flat = flatten_list_of_lists(list_of_lists)
@@ -108,9 +108,14 @@ def tileset_from_save(path: Path):
     connections = {}
     for char in chars:
         neighbor_tiles_allowed = [n[1] for n in neighbors if n[0] == char]
-        connections[char] = neighbor_tiles_allowed
+        connections[char] = {
+            "top": neighbor_tiles_allowed,
+            "bottom": neighbor_tiles_allowed,
+            "left": neighbor_tiles_allowed,
+            "right": neighbor_tiles_allowed,
+        }
     from pprint import pprint
 
     pprint(connections)
     info = {k: v for k, v in default_info.items() if k in connections}
-    return Tileset_wfc(info=info, connetions=connections)
+    return Tileset_wfc(info=info, connections=connections)
