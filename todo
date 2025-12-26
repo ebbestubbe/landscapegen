@@ -15,7 +15,7 @@ efficiency:
     ☐ Time generation of 10x10, 30x30, 60x60 etc for performance test.
     ☐ The function to render cells takes in a list of cells to rerender. But all cells are added to this dict. Optimize by only adding those with new
 
-ongiong:
+misc:
     ☐ Figure out what the hell is going on in render_cell code. especially removing old widtgets.
     ☐ Figure out what partial() functools does
     ✔ Confusion between height and width. Need extra abstraction? @done(25-12-13 19:14)
@@ -29,12 +29,14 @@ ongiong:
     ☐ Prettier tiles
     ☐ Border around undetermined cells, to make it easier to see which are undetermined?
     ✔ Order the tiles in "choice mode" @done(25-12-17 22:02)
+    ☐ doesnt make extra space between tiles when increasing height of window
 
 probabilities:
     ☐ Større sandsynligheder for at få tile X hvis den er ved siden af flere X
     ☐ Show average color of possibility of tiles
     ☐ Count tiles and neighbors from existing pixelmap.
     ☐ save tile info as well.
+    ☐ free form for clicking rules
     ✔ load rules from pixelmap @done(25-12-25 23:04)
     ✔ save pixelmap @done(25-12-24 10:58)
 

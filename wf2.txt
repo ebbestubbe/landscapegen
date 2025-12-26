@@ -1,0 +1,3 @@
+Lava,Cliff,Lava
+Cliff,Lava,Cliff
+Lava,Cliff,Lava

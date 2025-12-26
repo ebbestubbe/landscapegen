@@ -49,10 +49,10 @@ def save_wf():
 
 
 def use_loaded():
-    height = 5
-    width = 5
+    height = 10
+    width = 15
 
-    path = Path("wf2.txt")
+    path = Path("wf.txt")
     tileset = tileset_from_save(path)
 
     wavefunction = generate_undertermined_wavefunction(tileset=tileset, height=height, width=width)
