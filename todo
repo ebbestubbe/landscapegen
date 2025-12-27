@@ -34,7 +34,7 @@ misc:
 probabilities:
     ☐ Større sandsynligheder for at få tile X hvis den er ved siden af flere X
     ☐ Show average color of possibility of tiles
-    ☐ Count tiles and neighbors from existing pixelmap.
+    ✔ Count tiles and neighbors from existing pixelmap. @done(25-12-26 19:31)
     ☐ save tile info as well.
     ☐ free form for clicking rules
     ✔ load rules from pixelmap @done(25-12-25 23:04)

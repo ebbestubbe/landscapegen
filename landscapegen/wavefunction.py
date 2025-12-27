@@ -1,4 +1,5 @@
 import random
+from pathlib import Path
 from typing import List
 
 from landscapegen.utils import flatten_list_of_lists
@@ -41,7 +42,16 @@ class Wavefunction:
                     return False
         return True
 
-    def save(self, filename):
+    def save(self, filename: Path):
+        """Saves the wavefunction as a standard .txt.
+        only saves which cell is in which position.
+        Does not save color.
+        Does not save probabilities.
+        Assumes the wavefunction is collapsed.
+
+        Args:
+            filename (Path): filepath to save to.
+        """
         assert self.collapsed
 
         wf_text_rows = []
@@ -52,6 +62,18 @@ class Wavefunction:
             for row in wf_text_rows:
                 row_text = ",".join(row) + "\n"
                 file.writelines(row_text)
+
+    def calculate_entropy(self, i: int, j: int) -> float:
+        """Calculates entropy for cell (i,j)
+
+        Args:
+            i (int): _description_
+            j (int): _description_
+
+        Returns:
+            float: _description_
+        """
+        ...
 
 
 def collapse(point, remove_in, wavefunction, tileset, width, height):
