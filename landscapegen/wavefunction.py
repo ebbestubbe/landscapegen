@@ -16,18 +16,16 @@ class Wavefunction:
         # ]
         assert isinstance(wf[0][0], list)  # each cell must be a list of lists
         self.wf = wf
-        self.size0 = len(wf[0])
-        self.size1 = len(wf)
-        self.width = self.size0
-        self.height = self.size1
+        self.width = len(wf[0])
+        self.height = len(wf)
 
     def __eq__(self, other):
         if not isinstance(other, Wavefunction):
             return False
-        if (self.size0 != other.size0) or (self.size1 != other.size1):
+        if (self.width != other.width) or (self.height != other.height):
             return False
-        for j in range(self.size0):
-            for i in range(self.size1):
+        for j in range(self.width):
+            for i in range(self.height):
                 if not set(self.wf[j][i]) == set(other.wf[j][i]):
                     return False
         return True
@@ -76,11 +74,25 @@ class Wavefunction:
         ...
 
 
-def collapse(point, remove_in, wavefunction, tileset, width, height):
+# Methods to make it easier to switch from list to dict.
+def get_only_tile(cell):
+    if isinstance(cell, dict):  # If its a dict, return the only key.
+        assert len(cell.keys()) == 1
+        key = cell.keys()[0]
+        return key
+
+    # TODO: delete
+    if isinstance(cell, list):  # If its a list, assert its length==1 and return only element
+        assert len(cell) == 1
+        return cell[0]
+
+
+def collapse(point, remove_in, wavefunction, tileset):
     character_set = set(tileset.characters)
     j = point[0]
     i = point[1]
-
+    height = len(wavefunction)
+    width = len(wavefunction[0])
     # Remove the stuff we have to remove
     wavefunction[j][i] = list(set(wavefunction[j][i]) - remove_in)
     assert len(wavefunction[j][i]) > 0
@@ -99,14 +111,7 @@ def collapse(point, remove_in, wavefunction, tileset, width, height):
         to_remove_top = set(wavefunction[j_top][i]).intersection(forbidden_top)
         if len(to_remove_top) > 0:
             to_visit.append((coords_top, to_remove_top))
-            collapse(
-                coords_top,
-                forbidden_top,
-                wavefunction=wavefunction,
-                tileset=tileset,
-                width=width,
-                height=height,
-            )
+            collapse(coords_top, forbidden_top, wavefunction=wavefunction, tileset=tileset)
 
     # Right
     if i_right < width:  # Don't go out of scope
@@ -116,14 +121,7 @@ def collapse(point, remove_in, wavefunction, tileset, width, height):
         to_remove_right = set(wavefunction[j][i_right]).intersection(forbidden_right)
         if len(to_remove_right) > 0:
             to_visit.append((coords_right, to_remove_right))
-            collapse(
-                coords_right,
-                to_remove_right,
-                wavefunction=wavefunction,
-                tileset=tileset,
-                width=width,
-                height=height,
-            )
+            collapse(coords_right, to_remove_right, wavefunction=wavefunction, tileset=tileset)
 
     # Bottom
     if j_bottom < height:  # Don't go out of scope
@@ -133,14 +131,7 @@ def collapse(point, remove_in, wavefunction, tileset, width, height):
         to_remove_bottom = set(wavefunction[j_bottom][i]).intersection(forbidden_bottom)
         if len(to_remove_bottom) > 0:
             to_visit.append((cords_bottom, to_remove_bottom))
-            collapse(
-                cords_bottom,
-                to_remove_bottom,
-                wavefunction=wavefunction,
-                tileset=tileset,
-                width=width,
-                height=height,
-            )
+            collapse(cords_bottom, to_remove_bottom, wavefunction=wavefunction, tileset=tileset)
 
     # Left # Don't go out of scope
     if i_left >= 0:
@@ -150,14 +141,7 @@ def collapse(point, remove_in, wavefunction, tileset, width, height):
         to_remove_left = set(wavefunction[j][i_left]).intersection(forbidden_left)
         if len(to_remove_left) > 0:
             to_visit.append((cords_left, to_remove_left))
-            collapse(
-                cords_left,
-                to_remove_left,
-                wavefunction=wavefunction,
-                tileset=tileset,
-                width=width,
-                height=height,
-            )
+            collapse(cords_left, to_remove_left, wavefunction=wavefunction, tileset=tileset)
 
 
 def generate_collapsed_wfc(tileset, height=None, width=None):
@@ -172,7 +156,7 @@ def generate_collapsed_wfc(tileset, height=None, width=None):
         choice = random.choice(wavefunction[point[0]][point[1]])  #
         forbidden = set(wavefunction[point[0]][point[1]]) - set([choice])
 
-        collapse(point, forbidden, wavefunction, tileset, width, height)
+        collapse(point, forbidden, wavefunction, tileset)
 
         flat_coords = get_flat_coords_of_undetermined(wavefunction=wavefunction)
         iter = iter + 1

@@ -31,7 +31,7 @@ def plot_completely_undetermined_coast():
 
 def plot_completely_undetermined_simple():
     height = 3
-    width = 3
+    width = 10
     tileset = simple_tileset_factory()
     wavefunction = generate_undertermined_wavefunction(tileset=tileset, height=height, width=width)
     wavefunction = Wavefunction(wavefunction)
@@ -63,10 +63,10 @@ def use_loaded():
 def main():
     # plot_example_pyqt_2()
     # plot_completely_undetermined_coast()
-    # plot_completely_undetermined_simple()
+    plot_completely_undetermined_simple()
     # save_wf()
     # load_wf()
-    use_loaded()
+    # use_loaded()
 
 
 if __name__ == "__main__":

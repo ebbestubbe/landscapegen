@@ -18,6 +18,7 @@ from PyQt6.QtWidgets import QWidget
 from landscapegen.tileset import Tileset_wfc
 from landscapegen.wavefunction import collapse
 from landscapegen.wavefunction import get_flat_coords_of_undetermined
+from landscapegen.wavefunction import get_only_tile
 from landscapegen.wavefunction import Wavefunction
 
 
@@ -101,7 +102,7 @@ class ColorTilesApp(QWidget):
                 # 2 cases:
                 if len(cell) == 1:
                     # This cell is already determined, just plot it, with no button action.
-                    widget = self.make_determined_widget(cell[0])
+                    widget = self.make_determined_widget(get_only_tile(cell))
                 else:
                     # This cell is not determined! We need to plot all possibilities.
                     widget = QWidget()  # Add the container widget
@@ -158,14 +159,7 @@ class ColorTilesApp(QWidget):
             point = (i, j)
         forbidden = set(wf[point[0]][point[1]]) - set([chosen])
 
-        collapse(
-            point=point,
-            remove_in=forbidden,
-            wavefunction=wf,
-            tileset=self.tileset,
-            width=self.width,
-            height=self.height,
-        )
+        collapse(point=point, remove_in=forbidden, wavefunction=wf, tileset=self.tileset)
         self.wavefunction = Wavefunction(wf)
 
         # Find out which cells are affected and re-render these.
@@ -204,7 +198,7 @@ class ColorTilesApp(QWidget):
 
         if len(cell) == 1:
             # This cell is already determined, just plot it, with no button action.
-            widget = self.make_determined_widget(cell[0])
+            widget = self.make_determined_widget(get_only_tile(cell))
 
         else:
             widget = QWidget()

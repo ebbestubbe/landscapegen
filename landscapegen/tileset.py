@@ -34,14 +34,28 @@ def get_neighbor_inds(i, j, height, width):
     return neighbors
 
 
-def get_bidirectional_neighbor_set(path):
-    # Assumptions:
-    # Non directionality: that all directions are the same. no difference if a tile is up, down, left or right
-    # Symmetry: This means that neighbor pairs (a,b) is also (b,a)
+def get_bidirectional_neighbor_set(path: Path) -> set[tuple[str, str]]:
+    """Counts all combinations of neighbors present in file. Used to find the rules from a pixel map.
+    Assumptions:
 
-    # method: For each tile, find all neighbors and add both combinations.
 
-    # Count all pairs
+    Non directionality: that all directions are the same. no difference if a tile is up, down, left or right
+    Symmetry: This means that neighbor pairs (a,b) is also (b,a)
+
+    method: For each tile, find all neighbors and add both combinations.
+
+    Count all pairs
+
+    Args:
+        path:
+        File has a row for each row in wavefunction. Columns are separated by commas.
+        eg.
+            Grass,Water,Sand
+            Water,Sand,Sand
+
+    Returns:
+        tuple[str,str]: Each possible neighbor combination.
+    """
     with open(path) as f:
         lines = f.readlines()
     list_of_lists = [line.strip("\n").split(",") for line in lines]
