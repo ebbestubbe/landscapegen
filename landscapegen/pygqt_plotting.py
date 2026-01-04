@@ -19,6 +19,7 @@ from landscapegen.tileset import Tileset_wfc
 from landscapegen.wavefunction import collapse
 from landscapegen.wavefunction import get_flat_coords_of_undetermined
 from landscapegen.wavefunction import get_only_tile
+from landscapegen.wavefunction import get_tile_option_list
 from landscapegen.wavefunction import Wavefunction
 
 
@@ -117,14 +118,16 @@ class ColorTilesApp(QWidget):
                             btn = QPushButton()
                             btn.setFixedSize(self.minor_pixels, self.minor_pixels)
 
-                            if (small_i, small_j) in self.dict_reserved and self.dict_reserved[(small_i, small_j)] in cell:
+                            if (small_i, small_j) in self.dict_reserved and self.dict_reserved[
+                                (small_i, small_j)
+                            ] in cell:  # This tile is reserved, so the order is consistent. Paint the reserved tile
                                 chosen_tile = self.dict_reserved[(small_i, small_j)]
                                 rgba = [int(c * 255) for c in self.tileset.info[chosen_tile]]
                                 # Chosen thing in cell [i,j]
                                 # Partial is some magic to connect the button to a function and add arguments
                                 btn.clicked.connect(partial(self.collapse_cell, i, j, chosen_tile))
                                 btn.setStyleSheet(f"background-color: rgba{tuple(rgba)}; border: 0px solid black;")
-                            else:  # This cell is either not reserved for a specific tile, or the specific tile is not possible any more.
+                            else:  # This cell is either not reserved for a specific tile, or the specific tile is not possible any more. So we paint the "invalid choice" tile.
                                 palette = btn.palette()
                                 palette.setBrush(QPalette.ColorRole.Button, QBrush(self.invalid_choice_pixmap))
                                 btn.setAutoFillBackground(True)
@@ -144,7 +147,8 @@ class ColorTilesApp(QWidget):
             chosen (str): The chosen tile for this cell.
         """
         wf = self.wavefunction.wf
-        if i is None and j is None and chosen is None:  # No selection -> must be random
+        collapse_random = i is None and j is None and chosen is None  # No selection -> must be random
+        if collapse_random:
             flat_coords = get_flat_coords_of_undetermined(wavefunction=wf)
             if len(flat_coords) == 0:  # If the timer is going and there is no more to choose, stop the timer.
                 print("nothing more to collapse!")
@@ -152,8 +156,9 @@ class ColorTilesApp(QWidget):
                 self.timer.stop()
                 return
             point = random.choice(flat_coords)  # Random point to collapse
-            chosen = random.choice(wf[point[0]][point[1]])  #
-            # forbidden = set(wf[point[0]][point[1]]) - set([chosen])
+
+            cell = wf[point[0]][point[1]]
+            chosen = random.choice(get_tile_option_list(cell))
         else:
             print(i, j, chosen)
             point = (i, j)

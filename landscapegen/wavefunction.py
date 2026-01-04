@@ -87,6 +87,15 @@ def get_only_tile(cell):
         return cell[0]
 
 
+def get_tile_option_list(cell):
+    if isinstance(cell, dict):
+        return list(cell.keys())
+
+    # TODO: delete
+    if isinstance(cell, list):
+        return cell
+
+
 def collapse(point, remove_in, wavefunction, tileset):
     character_set = set(tileset.characters)
     j = point[0]

@@ -30,8 +30,8 @@ def plot_completely_undetermined_coast():
 
 
 def plot_completely_undetermined_simple():
-    height = 3
-    width = 10
+    height = 6
+    width = 8
     tileset = simple_tileset_factory()
     wavefunction = generate_undertermined_wavefunction(tileset=tileset, height=height, width=width)
     wavefunction = Wavefunction(wavefunction)

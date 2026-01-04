@@ -30,6 +30,7 @@ misc:
     ☐ Border around undetermined cells, to make it easier to see which are undetermined?
     ✔ Order the tiles in "choice mode" @done(25-12-17 22:02)
     ☐ doesnt make extra space between tiles when increasing height of window
+    ☐ collapse func: what the fuck does the to_visit list do?
 
 probabilities:
     ☐ Større sandsynligheder for at få tile X hvis den er ved siden af flere X
