@@ -1,20 +1,22 @@
 import random
 from pathlib import Path
+from typing import Dict
 from typing import List
 
 from landscapegen.utils import flatten_list_of_lists
 
 
 class Wavefunction:
-    def __init__(self, wf: List[List[List[str]]]):
+    def __init__(self, wf: List[List[Dict[str, float]]]):
         # wf is a triple array where the first 2 dimensions are rectangular, and
         # the contents are arrays of strings,  eg:
         # wf = [
-        #     [["Grass"], ["Grass", "Lava"]],
-        #     [["Sand"], ["Water"]],
-        #     [["Sand"], ["Sand", "Grass"]],
+        #     [{"Grass": 1}, {"Grass": 0.3, "Lava": 0.7}],
+        #     [{"Sand": 1}, {"Water":1}],
+        #     [{"Sand":1}, {"Sand":0.1, "Grass":0.9}],
         # ]
-        assert isinstance(wf[0][0], list)  # each cell must be a list of lists
+        assert isinstance(wf[0][0], Dict)  # each cell must be a list of dicts
+
         self.wf = wf
         self.width = len(wf[0])
         self.height = len(wf)
@@ -28,6 +30,8 @@ class Wavefunction:
             for i in range(self.height):
                 if not set(self.wf[j][i]) == set(other.wf[j][i]):
                     return False
+                # go through each key and see if the probabilities are the same.
+
         return True
 
     @property
@@ -39,6 +43,10 @@ class Wavefunction:
                 if len(col) > 1:
                     return False
         return True
+
+    def choose_random(cell: Dict[str, float]) -> str:
+        tile = random.choices(population=list(cell.keys()), weights=list(cell.values()), k=1)[0]
+        return tile
 
     def save(self, filename: Path):
         """Saves the wavefunction as a standard .txt.
@@ -173,7 +181,10 @@ def generate_collapsed_wfc(tileset, height=None, width=None):
 
 
 def generate_undertermined_wavefunction(tileset, height, width):
-    wavefunction = [[tileset.characters for _1 in range(width)] for _0 in range(height)]  # Array of all the possible tiles at this point
+    n_chars = len(tileset.characters)
+    print(n_chars)
+    # wavefunction = [[tileset.characters for _1 in range(width)] for _0 in range(height)]  # Array of all the possible tiles at this point
+    wavefunction = [[{c: 1 / n_chars for c in tileset.characters} for _1 in range(width)] for _0 in range(height)]
     return wavefunction
 
 
