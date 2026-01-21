@@ -1,3 +1,6 @@
-Water,Sand,Grass
-Sand,Grass,Cliff
-Grass,Grass,Grass
+Cliff,Cliff,Cliff,Cliff,Grass,Sand,Sand,Water
+Grass,Cliff,Cliff,Cliff,Cliff,Grass,Sand,Sand
+Cliff,Cliff,Cliff,Cliff,Cliff,Grass,Sand,Grass
+Grass,Cliff,Cliff,Lava,Cliff,Grass,Sand,Grass
+Cliff,Lava,Cliff,Cliff,Lava,Cliff,Grass,Cliff
+Cliff,Cliff,Grass,Cliff,Cliff,Cliff,Cliff,Lava

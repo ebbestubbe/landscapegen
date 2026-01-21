@@ -62,7 +62,7 @@ class Wavefunction:
 
         wf_text_rows = []
         for i, row in enumerate(self.wf):
-            row_text = [t[0] for t in row]  # Unpack a single row
+            row_text = [get_only_tile(cell) for cell in row]  # Unpack a single row
             wf_text_rows.append(row_text)
         with open(filename, "w") as file:
             for row in wf_text_rows:
@@ -82,26 +82,16 @@ class Wavefunction:
         ...
 
 
-# Methods to make it easier to switch from list to dict.
 def get_only_tile(cell):
-    if isinstance(cell, dict):  # If its a dict, return the only key.
+    if isinstance(cell, dict):
         assert len(cell.keys()) == 1
-        key = cell.keys()[0]
+        key = next(iter(cell.keys()))
         return key
-
-    # TODO: delete
-    if isinstance(cell, list):  # If its a list, assert its length==1 and return only element
-        assert len(cell) == 1
-        return cell[0]
 
 
 def get_tile_option_list(cell):
     if isinstance(cell, dict):
         return list(cell.keys())
-
-    # TODO: delete
-    if isinstance(cell, list):
-        return cell
 
 
 def collapse(point, remove_in, wavefunction, tileset):
@@ -111,7 +101,7 @@ def collapse(point, remove_in, wavefunction, tileset):
     height = len(wavefunction)
     width = len(wavefunction[0])
     # Remove the stuff we have to remove
-    wavefunction[j][i] = list(set(wavefunction[j][i]) - remove_in)
+    wavefunction[j][i] = {k: v for k, v in wavefunction[j][i].items() if k not in remove_in}
     assert len(wavefunction[j][i]) > 0
 
     # For each neighbor candidate: Dont do this if its outside the scope, and don't do it if the list of forbidden candidates is empty.
