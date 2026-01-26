@@ -122,7 +122,8 @@ class ColorTilesApp(QWidget):
                                 (small_i, small_j)
                             ] in cell:  # This tile is reserved, so the order is consistent. Paint the reserved tile
                                 chosen_tile = self.dict_reserved[(small_i, small_j)]
-                                rgba = [int(c * 255) for c in self.tileset.info[chosen_tile]]
+                                # rgba = [int(c * 255*(cell[chosen_tile]/max([v for _,v in cell.items()]))) for c in self.tileset.info[chosen_tile]]
+                                rgba = get_cell_rgba(cell, chosen_tile, self.tileset.info)
                                 # Chosen thing in cell [i,j]
                                 # Partial is some magic to connect the button to a function and add arguments
                                 btn.clicked.connect(partial(self.collapse_cell, i, j, chosen_tile))
@@ -220,7 +221,8 @@ class ColorTilesApp(QWidget):
 
                     if (small_i, small_j) in self.dict_reserved and self.dict_reserved[(small_i, small_j)] in cell:
                         chosen_tile = self.dict_reserved[(small_i, small_j)]
-                        rgba = [int(c * 255) for c in self.tileset.info[chosen_tile]]
+
+                        rgba = get_cell_rgba(cell, chosen_tile, self.tileset.info)
                         btn.clicked.connect(partial(self.collapse_cell, i, j, chosen_tile))
                         btn.setStyleSheet(f"background-color: rgba{tuple(rgba)}; border: 0px;")
                     else:
@@ -292,6 +294,26 @@ class ColorTilesApp(QWidget):
         rgba = [int(c * 255) for c in self.tileset.info[tile]]
         widget.setStyleSheet(f"background-color: rgba{tuple(rgba)}; border: 0px solid black;")
         return widget
+
+
+def get_cell_rgba(cell: dict[str, float], chosen_tile: str, tileset_info, normalize_max: bool = True) -> list[int]:
+    """Get rgba of drawing a cell
+
+    Args:
+        cell (dict[str, float]): tiles and probabilities
+        chosen_tile (str): Chosen tile string
+        tileset_info (_type_): Description of colors of tiles
+        normalize_max (bool, optional): Should normalize to maximum value or not.
+            Eg. if all values are the same, all colors will be maximum intensity.Defaults to True.
+
+    Returns:
+        list[int]: red, green, blue, alpha values
+    """
+    if normalize_max:
+        rgba = [int(c * 255 * (cell[chosen_tile] / max([v for _, v in cell.items()]))) for c in tileset_info[chosen_tile]]
+    else:
+        rgba = [int(c * 255 * (cell[chosen_tile])) for c in tileset_info[chosen_tile]]
+    return rgba
 
 
 def pyqt_plot(wavefunction: Wavefunction, tileset: Tileset_wfc):

@@ -175,6 +175,7 @@ def generate_undertermined_wavefunction(tileset, height, width):
     print(n_chars)
     # wavefunction = [[tileset.characters for _1 in range(width)] for _0 in range(height)]  # Array of all the possible tiles at this point
     wavefunction = [[{c: 1 / n_chars for c in tileset.characters} for _1 in range(width)] for _0 in range(height)]
+
     return wavefunction
 
 
