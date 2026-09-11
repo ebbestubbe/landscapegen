@@ -13,7 +13,7 @@ repos:
 -   repo: https://github.com/asottile/reorder_python_imports
     rev: v2.7.1
     hooks:
-    - id: reorder-python-imports
+        - id: reorder-python-imports
 
 -   repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
@@ -23,3 +23,9 @@ repos:
         - id: ruff-check
         # Run the formatter.
         - id: ruff-format
+-   repo: https://github.com/astral-sh/uv-pre-commit
+    # uv version.
+    # To make sure your uv.lock file is up to date even if your pyproject.toml file was changed:
+    rev: 0.12.13
+    hooks:
+        - id: uv-lock
